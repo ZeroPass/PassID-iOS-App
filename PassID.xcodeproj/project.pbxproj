@@ -59,24 +59,33 @@
 
 /* Begin PBXGroup section */
 		045DAA5D239D674500DFFE40 /* model */ = {
+		0450F56C23A2CCC00094FFDA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				048FDC932396D02100B01339 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		045DAA5D239D674500DFFE40 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */,
 				045DAA5E239D676000DFFE40 /* Utils.swift */,
 			);
-			path = model;
+			path = Models;
 			sourceTree = "<group>";
 		};
-		045DAA60239D981500DFFE40 /* proto */ = {
+		045DAA60239D981500DFFE40 /* Proto */ = {
 			isa = PBXGroup;
 			children = (
 				045DAA65239E898E00DFFE40 /* JRPClient.swift */,
 				045DAA63239D9CAD00DFFE40 /* JsonRpc.swift */,
 			);
-			path = proto;
+			path = Proto;
 			sourceTree = "<group>";
 		};
-		04603BB1239952F500FF26E2 /* view */ = {
+		04603BB1239952F500FF26E2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				048FDC912396D01E00B01339 /* ContentView.swift */,
@@ -85,7 +94,7 @@
 				045DAA5B239D61A400DFFE40 /* TextEdit.swift */,
 				045DAA6723A1B92F00DFFE40 /* Toast.swift */,
 			);
-			path = view;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		048FDC812396D01E00B01339 = {
@@ -107,13 +116,13 @@
 		048FDC8C2396D01E00B01339 /* PassID */ = {
 			isa = PBXGroup;
 			children = (
-				045DAA60239D981500DFFE40 /* proto */,
-				045DAA5D239D674500DFFE40 /* model */,
-				04603BB1239952F500FF26E2 /* view */,
+				0450F56C23A2CCC00094FFDA /* Resources */,
+				045DAA60239D981500DFFE40 /* Proto */,
+				045DAA5D239D674500DFFE40 /* Models */,
+				04603BB1239952F500FF26E2 /* Views */,
 				0434B0102396E8510043D16D /* PassID.entitlements */,
 				048FDC8D2396D01E00B01339 /* AppDelegate.swift */,
 				048FDC8F2396D01E00B01339 /* SceneDelegate.swift */,
-				048FDC932396D02100B01339 /* Assets.xcassets */,
 				048FDC982396D02100B01339 /* LaunchScreen.storyboard */,
 				048FDC9B2396D02100B01339 /* Info.plist */,
 				048FDC952396D02100B01339 /* Preview Content */,
@@ -170,7 +179,7 @@
 				};
 			};
 			buildConfigurationList = 048FDC852396D01E00B01339 /* Build configuration list for PBXProject "PassID" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
