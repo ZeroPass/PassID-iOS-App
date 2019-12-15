@@ -22,14 +22,27 @@ public struct JRPCResult {
 }
 
 class JRPClient {
-    var url: URL
+    
     var defaultTimeout: TimeInterval
     var userAgent: String? = nil
     var origin: String? = nil
     
-    init(url: URL, defaultTimeout: TimeInterval = SettingsStore.DEFAULT_TIMEOUT) {
+    private var url: URL
+    private var session: Session
+    
+    init(url: URL, defaultTimeout: TimeInterval = SettingsStore.DEFAULT_TIMEOUT, ste: ServerTrustEvaluating? = nil) {
         self.url = url
         self.defaultTimeout = defaultTimeout
+        self.session = JRPClient.makeSession(url: url, ste: ste)
+    }
+    
+    func setUrl(_ url: URL) {
+        self.url = url
+        if let tm = self.session.serverTrustManager {
+            if let ste = tm.evaluators.first?.value {
+                self.session = self.makeSession(ste: ste)
+            }
+        }
     }
     
     func call(method: String, params: JSON, completion: @escaping (Result<JRPCResult, JRPCError>)->Void) {
@@ -44,7 +57,8 @@ class JRPClient {
         req.allHTTPHeaderFields = self.makeHttpHeader()
         req.httpBody = try? jrpcReq.rawData()
 
-        AF.request(req).responseJSON{ response in
+        self.session.request(req).responseJSON{ response in
+            _ = self.session // Capture session in case self is destroyed before this closure is called.
             switch response.result {
             case .success(let value):
                 let rpcResponse = JsonRpcResponse(json: JSON(value))
@@ -61,6 +75,19 @@ class JRPClient {
     }
     
 
+    private func makeSession(ste: ServerTrustEvaluating?) -> Session {
+        return JRPClient.makeSession(url: self.url, ste: ste)
+    }
+    
+    private static func makeSession(url: URL, ste: ServerTrustEvaluating?) -> Session {
+        let host = url.host
+        if host != nil && ste != nil {
+            let tm = ServerTrustManager(evaluators: [host! : ste!])
+            return Session(serverTrustManager: tm)
+        }
+        return Session.default
+    }
+    
     private func makeHttpHeader() -> [String : String] {
         var header = [
              "Accept" : "application/json",
