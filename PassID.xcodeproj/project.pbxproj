@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		04435F2D2396FEDD00DFFDFC /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */; };
 		04435F2F2397017900DFFDFC /* SettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2E2397017900DFFDFC /* SettingsButton.swift */; };
+		0450F56F23A59E550094FFDA /* PassIdServer.der in Resources */ = {isa = PBXBuildFile; fileRef = 0450F56E23A59E550094FFDA /* PassIdServer.der */; };
 		045DAA57239C087F00DFFE40 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 045DAA56239C087F00DFFE40 /* Alamofire */; };
 		045DAA5A239C090000DFFE40 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 045DAA59239C090000DFFE40 /* SwiftyJSON */; };
 		045DAA5C239D61A400DFFE40 /* TextEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045DAA5B239D61A400DFFE40 /* TextEdit.swift */; };
@@ -29,6 +30,7 @@
 		0434B0102396E8510043D16D /* PassID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PassID.entitlements; sourceTree = "<group>"; };
 		04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		04435F2E2397017900DFFDFC /* SettingsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsButton.swift; sourceTree = "<group>"; };
+		0450F56E23A59E550094FFDA /* PassIdServer.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = PassIdServer.der; sourceTree = "<group>"; };
 		045DAA5B239D61A400DFFE40 /* TextEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEdit.swift; sourceTree = "<group>"; };
 		045DAA5E239D676000DFFE40 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		045DAA63239D9CAD00DFFE40 /* JsonRpc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonRpc.swift; sourceTree = "<group>"; };
@@ -58,11 +60,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		045DAA5D239D674500DFFE40 /* model */ = {
+		0450F56923A2CC340094FFDA /* Certs */ = {
+			isa = PBXGroup;
+			children = (
+				0450F56E23A59E550094FFDA /* PassIdServer.der */,
+			);
+			path = Certs;
+			sourceTree = "<group>";
+		};
 		0450F56C23A2CCC00094FFDA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				048FDC932396D02100B01339 /* Assets.xcassets */,
+				0450F56923A2CC340094FFDA /* Certs */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -207,6 +217,7 @@
 			files = (
 				048FDC9A2396D02100B01339 /* LaunchScreen.storyboard in Resources */,
 				048FDC972396D02100B01339 /* Preview Assets.xcassets in Resources */,
+				0450F56F23A59E550094FFDA /* PassIdServer.der in Resources */,
 				048FDC942396D02100B01339 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

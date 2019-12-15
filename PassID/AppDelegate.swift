@@ -7,9 +7,30 @@
 //
 
 import UIKit
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    let tePassIdServer: ServerTrustEvaluating?
+    
+    override init() {
+        var ste: ServerTrustEvaluating? = nil
+        if let scertPath = Bundle.main.path(forResource: "PassIdServer", ofType: "der") {
+            if let scertRaw: NSData = NSData(contentsOfFile: scertPath) {
+                if let scert = SecCertificateCreateWithData(kCFAllocatorDefault, scertRaw) {
+                    ste = PinnedCertificatesTrustEvaluator(
+                        certificates: [scert], // Note: Can also use Bundle.main.af.certificates which loads all cer, der certificates from apps bundle
+                        acceptSelfSignedCertificates: true,
+                        performDefaultValidation: false,
+                        validateHost: false
+                    )
+                }
+            }
+        }
+        
+        self.tePassIdServer = ste
+        super.init()
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
