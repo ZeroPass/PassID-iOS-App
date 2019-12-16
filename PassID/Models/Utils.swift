@@ -10,6 +10,9 @@ import Foundation
 
 
 struct Utils {
+    static private let hexDigitsUpper = Array("0123456789ABCDEF".utf16)
+    static private let hexDigitsLower = Array("0123456789abcdef".utf16)
+    
     static func isValidUrl(_ url: String, forceAddressAndPort: Bool = true) -> Bool {
         var urlRegEx = "^https?\\:\\/\\/([0-9a-zA-Z\\-\\.]+)"
         if !forceAddressAndPort { urlRegEx += "?" } // don't force address after http(s)://
@@ -20,5 +23,50 @@ struct Utils {
         let urlTest = NSPredicate(format:"SELF MATCHES %@", urlRegEx)
         let result = urlTest.evaluate(with: url)
         return result
+    }
+    
+    static func dataToHex(_ data: Data, upperCase: Bool = false) -> String {
+        let hexDigits = upperCase ? Utils.hexDigitsUpper : Utils.hexDigitsLower
+        var chars: [unichar] = []
+        chars.reserveCapacity(2 * data.count)
+        
+        for byte in data {
+            chars.append(hexDigits[Int(byte / 16)])
+            chars.append(hexDigits[Int(byte % 16)])
+        }
+        
+        return String(utf16CodeUnits: chars, count: chars.count)
+    }
+    
+    static func hexToData(_ hexStr: String) -> Data? {
+        var data = Data(capacity: hexStr.count / 2)
+
+        let regex = try! NSRegularExpression(pattern: "[0-9a-f]{1,2}", options: .caseInsensitive)
+        regex.enumerateMatches(in: hexStr, range: NSRange(hexStr.startIndex..., in: hexStr)) { match, _, _ in
+            let byteString = (hexStr as NSString).substring(with: match!.range)
+            let num = UInt8(byteString, radix: 16)!
+            data.append(num)
+        }
+
+        guard data.count > 0 else { return nil }
+        return data
+    }
+    
+}
+
+extension Data {
+    struct HexEncodingOptions: OptionSet {
+        let rawValue: Int
+        static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
+    }
+
+    func hexEncodedString(options: HexEncodingOptions = []) -> String {
+        return Utils.dataToHex(self, upperCase: options.contains(.upperCase))
+    }
+}
+
+extension String {
+    func toData() -> Data? {
+        return Utils.hexToData(self)
     }
 }
