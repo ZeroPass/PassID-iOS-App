@@ -34,11 +34,10 @@ struct SettingsSheet: View {
 
                     Button(action: {
                         self.showActivity = true
-                        let app = UIApplication.shared.delegate as! AppDelegate
-                        let rpc = JRPClient(url: self.settings.url, defaultTimeout: self.settings.timeout, ste: app.tePassIdServer)
-                        rpc.call(method: "passID.ping", params: ["ping" : UInt32.random(in: 0..<UInt32.max)]) { result in
+                        let api = PassIdApi(url: self.settings.url, timeout: self.settings.timeout)
+                        api.ping(ping: UInt32.random(in: 0..<UInt32.max)) { response in
                             self.showActivity = false
-                            if ((try? result.get()) != nil) {
+                            if response.value != nil {
                                 Toast.show(message: "Connection succeeded!")
                             }
                             else {
