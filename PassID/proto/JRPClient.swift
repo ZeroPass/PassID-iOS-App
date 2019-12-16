@@ -27,54 +27,76 @@ class JRPClient {
     var userAgent: String? = nil
     var origin: String? = nil
     
-    private var url: URL
+    var url: URL {
+        get {
+            return self._url
+        }
+        set {
+            self._url = newValue
+            if let tm = self.session.serverTrustManager {
+                if let ste = tm.evaluators.first?.value {
+                    self.session = self.makeSession(ste: ste)
+                }
+            }
+        }
+    }
+    
+    private var _url: URL
     private var session: Session
     
     init(url: URL, defaultTimeout: TimeInterval = SettingsStore.DEFAULT_TIMEOUT, ste: ServerTrustEvaluating? = nil) {
-        self.url = url
+        self._url = url
         self.defaultTimeout = defaultTimeout
         self.session = JRPClient.makeSession(url: url, ste: ste)
     }
     
-    func setUrl(_ url: URL) {
-        self.url = url
-        if let tm = self.session.serverTrustManager {
-            if let ste = tm.evaluators.first?.value {
-                self.session = self.makeSession(ste: ste)
-            }
-        }
+    func call(method: String, params: JSON? = nil, completion: @escaping (Result<JRPCResult, JRPCError>)->Void) -> JsonRpcRequest.ID {
+        return self.call(method: method, params: params, timeout: self.defaultTimeout, completion: completion)
     }
     
-    func call(method: String, params: JSON, completion: @escaping (Result<JRPCResult, JRPCError>)->Void) {
-        self.call(method: method, params: params, timeout: self.defaultTimeout, completion: completion)
+    func call(method: String, params: JSON? = nil, timeout: TimeInterval, completion: @escaping (Result<JRPCResult, JRPCError>)->Void) -> JsonRpcRequest.ID {
+        let jrpcReq = JsonRpcRequest(id: .string(UUID().uuidString), method: method, params: params)
+        self.call(jrpcReq: jrpcReq, timeout: timeout, completion: completion)
+        return jrpcReq.id!
     }
     
-    func call(method: String, params: JSON, timeout: TimeInterval, completion: @escaping (Result<JRPCResult, JRPCError>)->Void) {
-        let jrpcReq = JsonRpcRequest(id: .string(UUID().uuidString), method: method, params: params).toJSON()
-        
+    func call(jrpcReq: JsonRpcRequest, timeout: TimeInterval, completion: @escaping (Result<JRPCResult, JRPCError>)->Void) {
         var req = URLRequest(url: self.url, timeoutInterval: timeout)
         req.httpMethod = "POST"
         req.allHTTPHeaderFields = self.makeHttpHeader()
-        req.httpBody = try? jrpcReq.rawData()
+        req.httpBody = try? jrpcReq.toJSON().rawData()
 
         self.session.request(req).responseJSON{ response in
             _ = self.session // Capture session in case self is destroyed before this closure is called.
-            switch response.result {
-            case .success(let value):
-                let rpcResponse = JsonRpcResponse(json: JSON(value))
-                if (rpcResponse.error != nil) {
-                    completion(.failure(JRPCError.rpcError(rpcResponse.error!)))
-                }
-                else {
-                    completion(.success(JRPCResult(id: rpcResponse.id, data: rpcResponse.result!)))
-                }
-            case .failure(let error):
-                completion(.failure(JRPCError.connectionError(error)))
-            }
+            self.handleResponse(resp: response, completion: completion)
         }
     }
     
+    func notify(method: String, params: JSON? = nil) {
+        self.notify(method: method, params: params, timeout: self.defaultTimeout)
+    }
 
+    func notify(method: String, params: JSON? = nil, timeout: TimeInterval) {
+        let jrpcReq = JsonRpcRequest(id: nil, method: method, params: params)
+        self.call(jrpcReq: jrpcReq, timeout: timeout){_ in }
+    }
+    
+    
+    private func handleResponse(resp: AFDataResponse<Any>, completion: @escaping (Result<JRPCResult, JRPCError>)->Void) {
+       switch resp.result {
+           case .success(let value):
+               let rpcResponse = JsonRpcResponse(json: JSON(value))
+               if (rpcResponse.error != nil) {
+                   completion(.failure(JRPCError.rpcError(rpcResponse.error!)))
+               }
+               else {
+                   completion(.success(JRPCResult(id: rpcResponse.id, data: rpcResponse.result!)))
+               }
+           case .failure(let error):
+               completion(.failure(JRPCError.connectionError(error)))
+       }
+    }
+    
     private func makeSession(ste: ServerTrustEvaluating?) -> Session {
         return JRPClient.makeSession(url: self.url, ste: ste)
     }
