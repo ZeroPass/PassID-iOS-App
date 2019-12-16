@@ -65,20 +65,32 @@ struct SettingsSheet: View {
 
 
 struct SettingsButton : View {
-    var settings: SettingsStore = SettingsStore()
+    public let settings: SettingsStore
     
+    init(settings: SettingsStore = SettingsStore()) {
+        self.settings = settings
+    }
+    
+    private var dismissCallback: (() -> Void)? = nil
     @State private var showSheet = false
+    
     var body: some View {
         Button(action: { self.showSheet = true }){
             Text("Settings")
         }
-    .sheet(isPresented: $showSheet,
-               onDismiss: { self.showSheet = false }) {
-                SettingsSheet().environmentObject(self.settings)
+        .sheet(isPresented: $showSheet, onDismiss: { self.showSheet = false; self.dismissCallback?() }) {
+            SettingsSheet().environmentObject(self.settings)
         }
     }
 }
 
+extension SettingsButton {
+    func onDismiss(callback: (() -> Void)? = nil) -> SettingsButton {
+        var copy = self
+        copy.dismissCallback = callback
+        return copy
+    }
+}
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
