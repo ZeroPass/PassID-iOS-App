@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ActivityIndicator: View {
     
-    @State private var degress = 0.0
+    @State private var degrees = 0.0
     @State private var timer: Timer?
 
     var body: some View {
@@ -19,7 +19,7 @@ struct ActivityIndicator: View {
             .trim(from: 0.0, to: 0.6)
             .stroke(Color.blue, lineWidth: 5.0)
             .frame(width: 60, height: 60)
-            .rotationEffect(Angle(degrees: degress))
+            .rotationEffect(Angle(degrees: degrees))
             .onAppear(perform: { self.start() })
             .onDisappear(perform: { self.stop() })
     }
@@ -27,10 +27,10 @@ struct ActivityIndicator: View {
     func start() {
         self.timer = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { timer in
             withAnimation {
-                self.degress += 10.0
+                self.degrees += 10.0
             }
-            if self.degress == 360.0 {
-                self.degress = 0.0
+            if self.degrees == 360.0 {
+                self.degrees = 0.0
             }
         }
     }
@@ -43,10 +43,15 @@ struct ActivityIndicator: View {
 
 struct ActivityView<Content>: View where Content: View {
 
-    var msg: String = "Please wait ..."
+    var msg: String
     @Binding var showActivity: Bool
-    
     var content: () -> Content
+    
+    public init(msg: String = "Please wait ...", showActivity: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) {
+        self.msg = msg
+        self.content = content
+        self._showActivity = showActivity
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -55,6 +60,8 @@ struct ActivityView<Content>: View where Content: View {
                self.content()
                    .disabled(self.showActivity)
                    .blur(radius: self.showActivity ? 3 : 0)
+                
+                //Rectangle().foregroundColor(.red)
 
                if self.showActivity {
                    VStack {
@@ -70,7 +77,7 @@ struct ActivityView<Content>: View where Content: View {
             }
         }
         // Disable drag gesture (on sheets) when activity is visible
-        // Note: Doesn't work on multi finger drag gesture.
+        // Note: Doesn't work for multi finger drag gesture.
         .highPriorityGesture(DragGesture(), including: .all)
     }
 }
