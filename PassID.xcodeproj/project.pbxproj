@@ -10,6 +10,8 @@
 		04435F2D2396FEDD00DFFDFC /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */; };
 		04435F2F2397017900DFFDFC /* SettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2E2397017900DFFDFC /* SettingsButton.swift */; };
 		0450F56F23A59E550094FFDA /* PassIdServer.der in Resources */ = {isa = PBXBuildFile; fileRef = 0450F56E23A59E550094FFDA /* PassIdServer.der */; };
+		0450F57123A7A3070094FFDA /* ProtoObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450F57023A7A3070094FFDA /* ProtoObject.swift */; };
+		0450F57323A7B2240094FFDA /* ProtoChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450F57223A7B2240094FFDA /* ProtoChallenge.swift */; };
 		045DAA57239C087F00DFFE40 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 045DAA56239C087F00DFFE40 /* Alamofire */; };
 		045DAA5A239C090000DFFE40 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 045DAA59239C090000DFFE40 /* SwiftyJSON */; };
 		045DAA5C239D61A400DFFE40 /* TextEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045DAA5B239D61A400DFFE40 /* TextEdit.swift */; };
@@ -31,6 +33,8 @@
 		04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		04435F2E2397017900DFFDFC /* SettingsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsButton.swift; sourceTree = "<group>"; };
 		0450F56E23A59E550094FFDA /* PassIdServer.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = PassIdServer.der; sourceTree = "<group>"; };
+		0450F57023A7A3070094FFDA /* ProtoObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtoObject.swift; sourceTree = "<group>"; };
+		0450F57223A7B2240094FFDA /* ProtoChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtoChallenge.swift; sourceTree = "<group>"; };
 		045DAA5B239D61A400DFFE40 /* TextEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEdit.swift; sourceTree = "<group>"; };
 		045DAA5E239D676000DFFE40 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		045DAA63239D9CAD00DFFE40 /* JsonRpc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonRpc.swift; sourceTree = "<group>"; };
@@ -91,6 +95,8 @@
 			children = (
 				045DAA65239E898E00DFFE40 /* JRPClient.swift */,
 				045DAA63239D9CAD00DFFE40 /* JsonRpc.swift */,
+				0450F57023A7A3070094FFDA /* ProtoObject.swift */,
+				0450F57223A7B2240094FFDA /* ProtoChallenge.swift */,
 			);
 			path = Proto;
 			sourceTree = "<group>";
@@ -232,8 +238,10 @@
 				04435F2F2397017900DFFDFC /* SettingsButton.swift in Sources */,
 				04435F2D2396FEDD00DFFDFC /* SettingsStore.swift in Sources */,
 				045DAA5C239D61A400DFFE40 /* TextEdit.swift in Sources */,
+				0450F57123A7A3070094FFDA /* ProtoObject.swift in Sources */,
 				048FDC8E2396D01E00B01339 /* AppDelegate.swift in Sources */,
 				045DAA64239D9CAD00DFFE40 /* JsonRpc.swift in Sources */,
+				0450F57323A7B2240094FFDA /* ProtoChallenge.swift in Sources */,
 				048FDC902396D01E00B01339 /* SceneDelegate.swift in Sources */,
 				04603BB32399531D00FF26E2 /* ActivityView.swift in Sources */,
 				048FDC922396D01E00B01339 /* ContentView.swift in Sources */,
