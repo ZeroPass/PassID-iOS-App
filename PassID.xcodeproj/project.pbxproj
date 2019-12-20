@@ -27,6 +27,7 @@
 		048FDC942396D02100B01339 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048FDC932396D02100B01339 /* Assets.xcassets */; };
 		048FDC972396D02100B01339 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048FDC962396D02100B01339 /* Preview Assets.xcassets */; };
 		048FDC9A2396D02100B01339 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048FDC982396D02100B01339 /* LaunchScreen.storyboard */; };
+		04B93F6123ABABDA00BAFD54 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B93F6023ABABDA00BAFD54 /* Log.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		048FDC962396D02100B01339 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		048FDC992396D02100B01339 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		048FDC9B2396D02100B01339 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04B93F6023ABABDA00BAFD54 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 				048FDC982396D02100B01339 /* LaunchScreen.storyboard */,
 				048FDC9B2396D02100B01339 /* Info.plist */,
 				048FDC952396D02100B01339 /* Preview Content */,
+				04B93F6023ABABDA00BAFD54 /* Log.swift */,
 			);
 			path = PassID;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 				045DAA5C239D61A400DFFE40 /* TextEdit.swift in Sources */,
 				0450F57123A7A3070094FFDA /* ProtoObject.swift in Sources */,
 				048FDC8E2396D01E00B01339 /* AppDelegate.swift in Sources */,
+				04B93F6123ABABDA00BAFD54 /* Log.swift in Sources */,
 				045DAA64239D9CAD00DFFE40 /* JsonRpc.swift in Sources */,
 				0450F57323A7B2240094FFDA /* ProtoChallenge.swift in Sources */,
 				048FDC902396D01E00B01339 /* SceneDelegate.swift in Sources */,

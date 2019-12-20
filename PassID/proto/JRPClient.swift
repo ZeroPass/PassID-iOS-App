@@ -42,6 +42,7 @@ class JRPClient {
     }
     
     private var _url: URL
+    private let log = Log(category: "jrpc")
     private var session: Session
     
     init(url: URL, defaultTimeout: TimeInterval = SettingsStore.DEFAULT_TIMEOUT, ste: ServerTrustEvaluating? = nil) {
@@ -66,19 +67,21 @@ class JRPClient {
         req.allHTTPHeaderFields = self.makeHttpHeader()
         req.httpBody = try? jrpcReq.toJSON().rawData()
 
-        self.session.request(req).responseJSON{ response in
+        log.debug("Sending new RPC call to %@ reqId: %@", self.url as CVarArg,  jrpcReq.id?.string ?? "null")
+        log.verbose("RPC(method: \"%@\" params: %@)", jrpcReq.method, jrpcReq.params?.description ?? "null")
+        session.request(req).responseJSON{ response in
             _ = self.session // Capture session in case self is destroyed before this closure is called.
             self.handleResponse(resp: response, completion: completion)
         }
     }
     
     func notify(method: String, params: JSON? = nil) {
-        self.notify(method: method, params: params, timeout: self.defaultTimeout)
+        notify(method: method, params: params, timeout: self.defaultTimeout)
     }
 
     func notify(method: String, params: JSON? = nil, timeout: TimeInterval) {
         let jrpcReq = JsonRpcRequest(id: nil, method: method, params: params)
-        self.call(jrpcReq: jrpcReq, timeout: timeout){_ in }
+        call(jrpcReq: jrpcReq, timeout: timeout){_ in }
     }
     
     
@@ -86,13 +89,23 @@ class JRPClient {
        switch resp.result {
            case .success(let value):
                let rpcResponse = JsonRpcResponse(json: JSON(value))
-               if (rpcResponse.error != nil) {
+               let isError =  rpcResponse.error != nil
+               log.log(isError ? .error : .debug,
+                       "Received RPC %@ from: %@ reqId: %@",
+                       isError ? "error" : "response",
+                       resp.request?.url as CVarArg? ?? "null",
+                       rpcResponse.id?.string ?? "null"
+               )
+               if isError {
+                   log.verbose("RPC error: %@", rpcResponse.error!.localizedDescription )
                    completion(.failure(JRPCError.rpcError(rpcResponse.error!)))
                }
                else {
+                   log.verbose("RPC result: %@", rpcResponse.result?.description ?? "null")
                    completion(.success(JRPCResult(id: rpcResponse.id, data: rpcResponse.result!)))
                }
            case .failure(let error):
+               log.error("Failed to connect to: %@ error: \"%@\"", resp.request?.url as CVarArg? ?? "null", error.localizedDescription)
                completion(.failure(JRPCError.connectionError(error)))
        }
     }
