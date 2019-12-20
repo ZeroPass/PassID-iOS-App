@@ -57,23 +57,23 @@ struct ActivityView<Content>: View where Content: View {
         GeometryReader { geometry in
             ZStack(alignment: .center) {
                
-               self.content()
-                   .disabled(self.showActivity)
-                   .blur(radius: self.showActivity ? 3 : 0)
+                self.content()
+                    .disabled(self.showActivity)
+                    .blur(radius: self.showActivity ? 3 : 0)
+                    .navigationBarHidden(self.showActivity)
+                    .navigationBarBackButtonHidden(self.showActivity)
                 
-                //Rectangle().foregroundColor(.red)
-
-               if self.showActivity {
+                if self.showActivity {
                    VStack {
-                       ActivityIndicator()
-                       Text(self.msg)
+                        ActivityIndicator()
+                        Text(self.msg)
                            .padding(.horizontal, 20)
                    }
                    .frame(minWidth: geometry.size.width / 2, maxHeight: geometry.size.height / 5)
                    .background(Color.secondary.colorInvert())
                    .foregroundColor(Color.primary)
                    .cornerRadius(20)
-               }
+                }
             }
         }
         // Disable drag gesture (on sheets) when activity is visible
