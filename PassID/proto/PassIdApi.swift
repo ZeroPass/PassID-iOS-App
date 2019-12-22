@@ -6,6 +6,7 @@
 //  Copyright © 2019 ZeroPass. All rights reserved.
 //
 
+import Alamofire
 import Foundation
 import SwiftUI
 import SwiftyJSON
@@ -20,7 +21,7 @@ public enum PassIdApiError : Error {
 public enum ApiError : Error {
     case apiError(PassIdApiError)
     case rpcError(JsonRpcError)
-    case connectionError(JRPCError)
+    case connectionError(AFError)
 }
 
 struct ApiResponse<Success> {
@@ -108,7 +109,7 @@ class PassIdApi {
         var result: Result<Value, ApiError>? = nil
          
         switch response {
-            case .success(let rpcResult):
+            case .success(let rpcResult): do {
                 reqId = rpcResult.id
                 if let value = valueConstructor(rpcResult.data) {
                     result = .success(value)
@@ -118,7 +119,8 @@ class PassIdApi {
                         "Could not parse rpc response data. rpcResult.data=\(rpcResult.data)"
                     )))
                 }
-            case .failure(let error):
+            }
+            case .failure(let error): do {
                 switch error {
                     case .rpcError(let rpcError):
                         if rpcError.code > -32000  {
@@ -127,9 +129,10 @@ class PassIdApi {
                         else {
                             result = .failure(.rpcError(rpcError))
                         }
-                    default:
-                        result = .failure(.connectionError(error))
+                    case .connectionError(let aferror):
+                        result = .failure(.connectionError(aferror))
                 }
+            }
         }
         
         // Call completion callback with api response
