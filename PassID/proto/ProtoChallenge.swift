@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 struct CID : ProtoObject {
-    static let serKey = "cid"
+    internal static let serKey = "cid"
     var data: Data
     
     init?(data: Data) {
@@ -21,7 +21,7 @@ struct CID : ProtoObject {
     }
 
     init?(json: JSON) {
-        guard let rawCID = json[ProtoChallenge.serKey].string?.toData() else {
+        guard let rawCID = Data.fromHex(json[CID.serKey].string) else {
             return nil
         }
         self.init(data: rawCID)
@@ -29,7 +29,7 @@ struct CID : ProtoObject {
     
     func toJSON() -> JSON {
         return [
-            ProtoChallenge.serKey : self.data.hexEncodedString()
+            CID.serKey : self.data.toHex()
         ]
     }
     

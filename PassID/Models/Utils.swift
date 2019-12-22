@@ -55,18 +55,20 @@ struct Utils {
 }
 
 extension Data {
+    
     struct HexEncodingOptions: OptionSet {
         let rawValue: Int
         static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
     }
 
-    func hexEncodedString(options: HexEncodingOptions = []) -> String {
+    func toHex(options: HexEncodingOptions = []) -> String {
         return Utils.dataToHex(self, upperCase: options.contains(.upperCase))
     }
-}
-
-extension String {
-    func toData() -> Data? {
-        return Utils.hexToData(self)
+    
+    static func fromHex(_ hexEncodedString: String?) -> Data? {
+        guard let hex = hexEncodedString else {
+            return nil
+        }
+        return Utils.hexToData(hex)
     }
 }
