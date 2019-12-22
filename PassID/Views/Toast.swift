@@ -11,10 +11,11 @@ import SwiftUI
 
 struct Toast
 {
-    static let LONG_DELAY: TimeInterval  = 3.5
-    static let SHORT_DELAY: TimeInterval = 2.0
+    static let longDelay: TimeInterval  = 3.5
+    static let shortDelay: TimeInterval = 2.0
     
-    static func show(message: String, delay: TimeInterval = SHORT_DELAY) {
+    static func show(message: String, delay: TimeInterval = shortDelay) {
+        // Get first active global window
         guard let window: UIWindow = UIApplication.shared.connectedScenes
             .filter({ $0.activationState == .foregroundActive })
             .map({ $0 as? UIWindowScene })
@@ -42,12 +43,6 @@ struct Toast
         // Background
         toast.alpha               = 0.0
         toast.backgroundColor     = UIColor.gray.withAlphaComponent(0.8)
-        
-        // Shadow
-        toast.clipsToBounds       =  false
-        toast.layer.shadowColor   = UIColor.placeholderText.cgColor
-        toast.layer.shadowOffset  = CGSize(width: 3, height: 3)
-        toast.layer.shadowOpacity = 0.7
         
         // Fix text y position within frame to center position
         var topCorrect = (toast.bounds.size.height - toast.contentSize.height * toast.zoomScale) / 2.0
