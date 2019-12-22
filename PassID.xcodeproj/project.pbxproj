@@ -13,6 +13,7 @@
 		0450F57123A7A3070094FFDA /* ProtoObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450F57023A7A3070094FFDA /* ProtoObject.swift */; };
 		0450F57323A7B2240094FFDA /* ProtoChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450F57223A7B2240094FFDA /* ProtoChallenge.swift */; };
 		0450F57523A7E20A0094FFDA /* PassIdApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450F57423A7E20A0094FFDA /* PassIdApi.swift */; };
+		0450F57723A81A540094FFDA /* PassportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450F57623A81A540094FFDA /* PassportView.swift */; };
 		045DAA57239C087F00DFFE40 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 045DAA56239C087F00DFFE40 /* Alamofire */; };
 		045DAA5A239C090000DFFE40 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 045DAA59239C090000DFFE40 /* SwiftyJSON */; };
 		045DAA5C239D61A400DFFE40 /* TextEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045DAA5B239D61A400DFFE40 /* TextEdit.swift */; };
@@ -28,6 +29,13 @@
 		048FDC972396D02100B01339 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048FDC962396D02100B01339 /* Preview Assets.xcassets */; };
 		048FDC9A2396D02100B01339 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048FDC982396D02100B01339 /* LaunchScreen.storyboard */; };
 		04B93F6123ABABDA00BAFD54 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B93F6023ABABDA00BAFD54 /* Log.swift */; };
+		04FB795023AE798C004D53A6 /* PassIdClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB794F23AE798B004D53A6 /* PassIdClient.swift */; };
+		04FB795323AEB8DA004D53A6 /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */; };
+		04FB795523AEBB70004D53A6 /* UserId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795423AEBB6F004D53A6 /* UserId.swift */; };
+		04FB795723AEBB87004D53A6 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795623AEBB87004D53A6 /* Session.swift */; };
+		04FB795923AEBBAB004D53A6 /* SessionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795823AEBBAB004D53A6 /* SessionKey.swift */; };
+		04FB795B23AFCB12004D53A6 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795A23AFCB12004D53A6 /* ButtonView.swift */; };
+		04FB795D23AFE73F004D53A6 /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795C23AFE73F004D53A6 /* SuccessView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +46,7 @@
 		0450F57023A7A3070094FFDA /* ProtoObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtoObject.swift; sourceTree = "<group>"; };
 		0450F57223A7B2240094FFDA /* ProtoChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtoChallenge.swift; sourceTree = "<group>"; };
 		0450F57423A7E20A0094FFDA /* PassIdApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassIdApi.swift; sourceTree = "<group>"; };
+		0450F57623A81A540094FFDA /* PassportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassportView.swift; sourceTree = "<group>"; };
 		045DAA5B239D61A400DFFE40 /* TextEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEdit.swift; sourceTree = "<group>"; };
 		045DAA5E239D676000DFFE40 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		045DAA63239D9CAD00DFFE40 /* JsonRpc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonRpc.swift; sourceTree = "<group>"; };
@@ -53,6 +62,13 @@
 		048FDC992396D02100B01339 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		048FDC9B2396D02100B01339 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04B93F6023ABABDA00BAFD54 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		04FB794F23AE798B004D53A6 /* PassIdClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassIdClient.swift; sourceTree = "<group>"; };
+		04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RIPEMD160.swift; sourceTree = "<group>"; };
+		04FB795423AEBB6F004D53A6 /* UserId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserId.swift; sourceTree = "<group>"; };
+		04FB795623AEBB87004D53A6 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		04FB795823AEBBAB004D53A6 /* SessionKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionKey.swift; sourceTree = "<group>"; };
+		04FB795A23AFCB12004D53A6 /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		04FB795C23AFE73F004D53A6 /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +115,13 @@
 			children = (
 				045DAA65239E898E00DFFE40 /* JRPClient.swift */,
 				045DAA63239D9CAD00DFFE40 /* JsonRpc.swift */,
-				0450F57023A7A3070094FFDA /* ProtoObject.swift */,
-				0450F57223A7B2240094FFDA /* ProtoChallenge.swift */,
 				0450F57423A7E20A0094FFDA /* PassIdApi.swift */,
+				04FB794F23AE798B004D53A6 /* PassIdClient.swift */,
+				0450F57223A7B2240094FFDA /* ProtoChallenge.swift */,
+				0450F57023A7A3070094FFDA /* ProtoObject.swift */,
+				04FB795623AEBB87004D53A6 /* Session.swift */,
+				04FB795823AEBBAB004D53A6 /* SessionKey.swift */,
+				04FB795423AEBB6F004D53A6 /* UserId.swift */,
 			);
 			path = Proto;
 			sourceTree = "<group>";
@@ -109,9 +129,12 @@
 		04603BB1239952F500FF26E2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				048FDC912396D01E00B01339 /* ContentView.swift */,
-				04435F2E2397017900DFFDFC /* SettingsButton.swift */,
 				04603BB22399531C00FF26E2 /* ActivityView.swift */,
+				04FB795A23AFCB12004D53A6 /* ButtonView.swift */,
+				048FDC912396D01E00B01339 /* ContentView.swift */,
+				0450F57623A81A540094FFDA /* PassportView.swift */,
+				04435F2E2397017900DFFDFC /* SettingsButton.swift */,
+				04FB795C23AFE73F004D53A6 /* SuccessView.swift */,
 				045DAA5B239D61A400DFFE40 /* TextEdit.swift */,
 				045DAA6723A1B92F00DFFE40 /* Toast.swift */,
 			);
@@ -137,17 +160,18 @@
 		048FDC8C2396D01E00B01339 /* PassID */ = {
 			isa = PBXGroup;
 			children = (
-				0450F56C23A2CCC00094FFDA /* Resources */,
-				045DAA60239D981500DFFE40 /* Proto */,
+				04FB795123AEB8AB004D53A6 /* Crypto */,
 				045DAA5D239D674500DFFE40 /* Models */,
+				048FDC952396D02100B01339 /* Preview Content */,
+				045DAA60239D981500DFFE40 /* Proto */,
+				0450F56C23A2CCC00094FFDA /* Resources */,
 				04603BB1239952F500FF26E2 /* Views */,
 				0434B0102396E8510043D16D /* PassID.entitlements */,
 				048FDC8D2396D01E00B01339 /* AppDelegate.swift */,
+				04B93F6023ABABDA00BAFD54 /* Log.swift */,
 				048FDC8F2396D01E00B01339 /* SceneDelegate.swift */,
 				048FDC982396D02100B01339 /* LaunchScreen.storyboard */,
 				048FDC9B2396D02100B01339 /* Info.plist */,
-				048FDC952396D02100B01339 /* Preview Content */,
-				04B93F6023ABABDA00BAFD54 /* Log.swift */,
 			);
 			path = PassID;
 			sourceTree = "<group>";
@@ -159,6 +183,14 @@
 				048FDC962396D02100B01339 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		04FB795123AEB8AB004D53A6 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */,
+			);
+			path = Crypto;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,16 +278,24 @@
 				045DAA5C239D61A400DFFE40 /* TextEdit.swift in Sources */,
 				0450F57123A7A3070094FFDA /* ProtoObject.swift in Sources */,
 				048FDC8E2396D01E00B01339 /* AppDelegate.swift in Sources */,
+				0450F57723A81A540094FFDA /* PassportView.swift in Sources */,
+				04FB795B23AFCB12004D53A6 /* ButtonView.swift in Sources */,
 				04B93F6123ABABDA00BAFD54 /* Log.swift in Sources */,
 				045DAA64239D9CAD00DFFE40 /* JsonRpc.swift in Sources */,
+				04FB795023AE798C004D53A6 /* PassIdClient.swift in Sources */,
 				0450F57323A7B2240094FFDA /* ProtoChallenge.swift in Sources */,
 				048FDC902396D01E00B01339 /* SceneDelegate.swift in Sources */,
 				0450F57523A7E20A0094FFDA /* PassIdApi.swift in Sources */,
 				04603BB32399531D00FF26E2 /* ActivityView.swift in Sources */,
 				048FDC922396D01E00B01339 /* ContentView.swift in Sources */,
+				04FB795723AEBB87004D53A6 /* Session.swift in Sources */,
+				04FB795D23AFE73F004D53A6 /* SuccessView.swift in Sources */,
 				045DAA6823A1B92F00DFFE40 /* Toast.swift in Sources */,
 				045DAA66239E898E00DFFE40 /* JRPClient.swift in Sources */,
 				045DAA5F239D676100DFFE40 /* Utils.swift in Sources */,
+				04FB795323AEB8DA004D53A6 /* RIPEMD160.swift in Sources */,
+				04FB795923AEBBAB004D53A6 /* SessionKey.swift in Sources */,
+				04FB795523AEBB70004D53A6 /* UserId.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
