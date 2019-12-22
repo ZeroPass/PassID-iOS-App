@@ -5,13 +5,12 @@
 //  Created by smlu on 4/12/2019.
 //  Copyright © 2019 ZeroPass. All rights reserved.
 //
-
-import Foundation
 import Alamofire
+import Foundation
 import SwiftyJSON
 
 
-public enum JRPCError : Error{
+public enum JRPCError : Error {
     case rpcError(JsonRpcError)
     case connectionError(AFError)
 }
