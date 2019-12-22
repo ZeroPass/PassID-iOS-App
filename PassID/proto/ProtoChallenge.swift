@@ -42,7 +42,7 @@ struct CID : ProtoObject {
 
 struct ProtoChallenge : ProtoObject {
 
-    static let serKey = "challenge"
+    internal static let serKey = "challenge"
     var data: Data
     
     var id: CID {

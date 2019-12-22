@@ -8,6 +8,8 @@
 
 import Foundation
 import SwiftyJSON
+
+
 protocol ProtoObject {
     static var serKey: String { get }
     var data: Data { get }
