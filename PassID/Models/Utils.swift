@@ -66,6 +66,10 @@ struct Utils {
 
 extension Data {
     
+    var bytes: [UInt8] {
+        return [UInt8](self)
+    }
+    
     struct HexEncodingOptions: OptionSet {
         let rawValue: Int
         static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
