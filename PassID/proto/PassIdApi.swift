@@ -16,6 +16,24 @@ typealias ApiRequestID = JsonRpcRequest.ID
 public enum PassIdApiError : Error {
     case parseError(String)
     case raw(Int, String)
+    
+    public var message: String {
+        switch self {
+        case .parseError:
+            return "Response parse Error"
+        case .raw(_, let msg):
+            return msg
+        }
+    }
+    
+    public var code: Int {
+        switch self {
+        case .parseError:
+            return 0
+        case .raw(let code, _):
+            return code
+        }
+    }
 }
 
 public enum ApiError : Error {
