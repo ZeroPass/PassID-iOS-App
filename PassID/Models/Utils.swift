@@ -52,6 +52,16 @@ struct Utils {
         return data
     }
     
+    
+    static func log(_ n: Int, _ base: Int) -> Int {
+        var result: Int = 0
+        var n = n
+        while n > 0 {
+            n = n / base
+            result += 1
+        }
+        return result
+    }
 }
 
 extension Data {
