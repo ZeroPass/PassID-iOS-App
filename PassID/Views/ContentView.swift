@@ -8,13 +8,24 @@
 
 import SwiftUI
 
+
 struct ContentView: View {
-    
-    @State private var showSetingsView = false
+
     var body: some View {
         NavigationView {
-    
-            Text("Hello, PassID!")
+            VStack {
+                Spacer()
+                    .frame(height: 75)
+                NavigationLink(destination: ActionView(action: .register)) {
+                    ButtonView(text: "Register")
+                }
+                Spacer()
+                    .frame(height: 10)
+                NavigationLink(destination: ActionView(action: .login)) {
+                    ButtonView(text: "Login")
+                }
+                Spacer()
+            }
             .navigationBarTitle("PassID")
             .navigationBarItems(trailing: SettingsButton())
         }
@@ -24,7 +35,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            //ContentView()
             ContentView()
                 .environment(\.colorScheme, .dark)
         }
