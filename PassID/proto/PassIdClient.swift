@@ -9,6 +9,7 @@
 import Alamofire
 import Foundation
 
+
 final class PassIdClient {
     
     typealias Retry = Bool
@@ -17,6 +18,23 @@ final class PassIdClient {
         self.api = PassIdApi(url: url, timeout: timeout)
     }
     
+    deinit {
+        cancelChallenge()
+    }
+    
+    final class SessionPromise {
+        private var challengeCallback: ((_ challenge: ProtoChallenge, _ completion: @escaping (/*PassportData*/) -> ()) -> Void)? = nil
+        private var successCallback: ((_ uid: UserId) -> ())? = nil
+        private var errorCallback: ((_ error: ApiError) -> ())? = nil
+    }
+    
+    private let api: PassIdApi
+    private var challenge: ProtoChallenge? = nil
+    private var connectionErrorCallback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> Void)? = nil
+    private var session: ProtoSession? = nil
+}
+
+extension PassIdClient {
     var uid: UserId? {
         get{
             return session?.uid
@@ -40,27 +58,70 @@ final class PassIdClient {
             self.api.url = newValue
         }
     }
-    
-    private let api: PassIdApi
-    private var challenge: ProtoChallenge? = nil
-    private var connectionErrorCallback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> Void)? = nil
-    private var session: ProtoSession? = nil
+}
 
-    private func cancelChallenge() {
+extension PassIdClient {
+    
+    @discardableResult
+    func onConnectionError(callback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> Void)?) -> PassIdClient {
+        self.connectionErrorCallback = callback
+        return self
+    }
+    
+    func cancelChallenge() {
         if self.challenge != nil {
             self.api.cancelChallenge(challenge: self.challenge!)
         }
     }
-}
-
-extension PassIdClient {
-    func onConnectionError(callback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> Void)?) -> PassIdClient {
-        let copy = self
-        copy.connectionErrorCallback = callback
-        return copy
+    
+    func register() -> SessionPromise {
+        let scb = SessionPromise()
+        requestChallenge{ error in
+            if error != nil {
+                scb.error(error!)
+            }
+            else {
+                scb.challenge(self.challenge!) { /*data in */
+                    /*
+                     self.requestRegister(data.dg15, data.sod, self.challenge!.id, data.csigs, data.dg14) {
+                        resp in
+                        if resp.error != nil {
+                            scb.error(resp.error!)
+                        }
+                        else {
+                            self.session = resp.value!
+                            scb.success(self.session.uid)
+                        }
+                     }
+                     */
+                }
+            }
+        }
+        
+        return scb
     }
 }
 
+extension PassIdClient.SessionPromise {
+
+    @discardableResult
+    func onChallenge(_ cb: @escaping (_ challenge: ProtoChallenge, _ completion: @escaping (/*PassportData*/) -> ()) -> Void) -> PassIdClient.SessionPromise {
+        self.challengeCallback = cb
+        return self
+    }
+    
+    @discardableResult
+    func onSuccess(_ cb: @escaping (_ uid: UserId) -> ()) -> PassIdClient.SessionPromise {
+        self.successCallback = cb
+        return self
+    }
+    
+    @discardableResult
+    func onError(_ cb: @escaping (_ error: ApiError) -> ()) -> PassIdClient.SessionPromise {
+        self.errorCallback = cb
+        return self
+    }
+}
 
 extension PassIdClient {
 
@@ -104,3 +165,26 @@ extension PassIdClient {
         }
     }
 }
+
+extension PassIdClient.SessionPromise {
+    
+    func challenge(_ challenge: ProtoChallenge, _ completion: @escaping (/*PassportData*/) -> ()) {
+        if challengeCallback != nil {
+            challengeCallback!(challenge, completion)
+        }
+    }
+    
+    func success(_ uid: UserId) {
+        if successCallback != nil {
+            successCallback!(uid)
+        }
+    }
+
+    func error(_ error: ApiError) {
+        if errorCallback != nil {
+            errorCallback!(error)
+        }
+    }
+}
+
+
