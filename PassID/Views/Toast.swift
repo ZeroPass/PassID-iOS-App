@@ -15,14 +15,7 @@ struct Toast
     static let shortDelay: TimeInterval = 2.0
     
     static func show(message: String, delay: TimeInterval = shortDelay) {
-        // Get first active global window
-        guard let window: UIWindow = UIApplication.shared.connectedScenes
-            .filter({ $0.activationState == .foregroundActive })
-            .map({ $0 as? UIWindowScene })
-            .compactMap({ $0 })
-            .first?.windows
-            .filter({ $0.isKeyWindow }).first
-        else {
+        guard let window = UIApplication.keyWindow else {
             return
         }
         
