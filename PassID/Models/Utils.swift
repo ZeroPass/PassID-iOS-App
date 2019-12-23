@@ -85,4 +85,19 @@ extension Data {
         }
         return Utils.hexToData(hex)
     }
+    
+    mutating func append(_ byte: UInt8) {
+        var byte = byte
+        self.append(UnsafeBufferPointer(start: &byte, count: 1))
+    }
+    
+    mutating func append(_ n: Int) {
+        var n = n
+        self.append(UnsafeBufferPointer(start: &n, count: 1))
+    }
+    
+    mutating func append(_ n: UInt) {
+        var n = n
+        self.append(UnsafeBufferPointer(start: &n, count: 1))
+    }
 }
