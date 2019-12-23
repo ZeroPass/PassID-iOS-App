@@ -30,7 +30,7 @@ struct Toast
         toast.text                = message
         toast.textAlignment       = .center
         toast.textColor           = UIColor.white
-        toast.textContainerInset  = UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 10)
+        toast.textContainerInset  = UIEdgeInsets(top: 15, left: 17, bottom: 15, right: 17)
         toast.font                = UIFont(name: (toast.font?.fontName)!, size: 17)
         
         // Background
