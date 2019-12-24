@@ -12,6 +12,7 @@
 		042B954523B15CF000F71097 /* MRTDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954423B15CF000F71097 /* MRTDUtils.swift */; };
 		042B954723B1601400F71097 /* MRTDSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954623B1601400F71097 /* MRTDSession.swift */; };
 		042B954923B247B200F71097 /* ResponseAPDU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954823B247B200F71097 /* ResponseAPDU.swift */; };
+		042B954D23B24C7D00F71097 /* MRTDTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954C23B24C7D00F71097 /* MRTDTag.swift */; };
 		042B954F23B26DD500F71097 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954E23B26DD500F71097 /* CryptoUtils.swift */; };
 		042B955123B2A69500F71097 /* LDSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955023B2A69500F71097 /* LDSFile.swift */; };
 		04435F2D2396FEDD00DFFDFC /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */; };
@@ -55,6 +56,8 @@
 		042B954423B15CF000F71097 /* MRTDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRTDUtils.swift; sourceTree = "<group>"; };
 		042B954623B1601400F71097 /* MRTDSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRTDSession.swift; sourceTree = "<group>"; };
 		042B954823B247B200F71097 /* ResponseAPDU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseAPDU.swift; sourceTree = "<group>"; };
+		042B954C23B24C7D00F71097 /* MRTDTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRTDTag.swift; sourceTree = "<group>"; };
+		042B954E23B26DD500F71097 /* CryptoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtils.swift; sourceTree = "<group>"; };
 		042B955023B2A69500F71097 /* LDSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LDSFile.swift; sourceTree = "<group>"; };
 		0434B0102396E8510043D16D /* PassID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PassID.entitlements; sourceTree = "<group>"; };
 		04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
@@ -226,6 +229,7 @@
 			children = (
 				042B955023B2A69500F71097 /* LDSFile.swift */,
 				042B954623B1601400F71097 /* MRTDSession.swift */,
+				042B954C23B24C7D00F71097 /* MRTDTag.swift */,
 				042B954423B15CF000F71097 /* MRTDUtils.swift */,
 				042B954823B247B200F71097 /* ResponseAPDU.swift */,
 				04FB795F23B0182A004D53A6 /* TLV.swift */,
@@ -345,6 +349,7 @@
 				04FB796223B05AF5004D53A6 /* View+ShowAlert.swift in Sources */,
 				045DAA5F239D676100DFFE40 /* Utils.swift in Sources */,
 				04FB795323AEB8DA004D53A6 /* RIPEMD160.swift in Sources */,
+				042B954D23B24C7D00F71097 /* MRTDTag.swift in Sources */,
 				04FB795923AEBBAB004D53A6 /* SessionKey.swift in Sources */,
 				04FB795523AEBB70004D53A6 /* UserId.swift in Sources */,
 			);
