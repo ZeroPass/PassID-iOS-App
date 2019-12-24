@@ -75,7 +75,7 @@ extension Data {
         static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
     }
 
-    func toHex(options: HexEncodingOptions = []) -> String {
+    func hex(options: HexEncodingOptions = []) -> String {
         return Utils.dataToHex(self, upperCase: options.contains(.upperCase))
     }
     

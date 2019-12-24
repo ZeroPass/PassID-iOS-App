@@ -124,12 +124,12 @@ struct ActionView: View {
     }
     
     private func signChallenge(_ challenge: ProtoChallenge, _ completion: @escaping (/*PassportData*/) -> Void) {
-        log.debug("Got challenge cid: %@ challenge: %@", challenge.id.data.toHex(), challenge.data.toHex())
+        log.debug("Got challenge cid: %@ challenge: %@", challenge.id.data.hex(), challenge.data.hex())
         Toast.show(message: "Got Challenge")
     }
     
     private func handleSuccess(_ uid: UserId) {
-        log.debug("PassId session was successfully created, uid: %@", uid.data.toHex())
+        log.debug("PassId session was successfully created, uid: %@", uid.data.hex())
     }
     
     private func handleError(_ error: ApiError) {

@@ -29,7 +29,7 @@ struct CID : ProtoObject {
     
     func toJSON() -> JSON {
         return [
-            CID.serKey : self.data.toHex()
+            CID.serKey : self.data.hex()
         ]
     }
     

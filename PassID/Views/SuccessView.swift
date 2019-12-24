@@ -49,7 +49,7 @@ struct SuccessView: View {
                 VStack {
                     Spacer()
                         .frame(height: 1)
-                    Text(uid.data.toHex())
+                    Text(uid.data.hex())
                         .font(.callout)
                         .foregroundColor(.gray)
                 }
