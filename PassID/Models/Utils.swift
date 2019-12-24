@@ -64,6 +64,12 @@ struct Utils {
     }
 }
 
+extension Array where Element == UInt8  {
+    func hex() -> String {
+        return Utils.dataToHex(Data(self))
+    }
+}
+
 extension Data {
     
     var bytes: [UInt8] {
