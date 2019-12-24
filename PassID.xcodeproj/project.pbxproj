@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		042B954123B1531900F71097 /* DES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954023B1531900F71097 /* DES.swift */; };
 		042B954323B159EF00F71097 /* ISO9797Alg3Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954223B159EF00F71097 /* ISO9797Alg3Mac.swift */; };
+		042B954F23B26DD500F71097 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954E23B26DD500F71097 /* CryptoUtils.swift */; };
 		04435F2D2396FEDD00DFFDFC /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */; };
 		04435F2F2397017900DFFDFC /* SettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2E2397017900DFFDFC /* SettingsButton.swift */; };
 		0450F56F23A59E550094FFDA /* PassIdServer.der in Resources */ = {isa = PBXBuildFile; fileRef = 0450F56E23A59E550094FFDA /* PassIdServer.der */; };
@@ -204,6 +205,7 @@
 		04FB795123AEB8AB004D53A6 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				042B954E23B26DD500F71097 /* CryptoUtils.swift */,
 				042B954023B1531900F71097 /* DES.swift */,
 				042B954223B159EF00F71097 /* ISO9797Alg3Mac.swift */,
 				04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */,
@@ -313,6 +315,7 @@
 				04FB796023B0182A004D53A6 /* TLV.swift in Sources */,
 				045DAA64239D9CAD00DFFE40 /* JsonRpc.swift in Sources */,
 				04FB795023AE798C004D53A6 /* PassIdClient.swift in Sources */,
+				042B954F23B26DD500F71097 /* CryptoUtils.swift in Sources */,
 				0450F57323A7B2240094FFDA /* ProtoChallenge.swift in Sources */,
 				048FDC902396D01E00B01339 /* SceneDelegate.swift in Sources */,
 				0450F57523A7E20A0094FFDA /* PassIdApi.swift in Sources */,
