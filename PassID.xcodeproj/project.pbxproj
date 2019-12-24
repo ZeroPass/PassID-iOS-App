@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		042B954123B1531900F71097 /* DES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954023B1531900F71097 /* DES.swift */; };
 		042B954323B159EF00F71097 /* ISO9797Alg3Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954223B159EF00F71097 /* ISO9797Alg3Mac.swift */; };
+		042B954523B15CF000F71097 /* MRTDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954423B15CF000F71097 /* MRTDUtils.swift */; };
 		042B954723B1601400F71097 /* MRTDSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954623B1601400F71097 /* MRTDSession.swift */; };
 		042B954923B247B200F71097 /* ResponseAPDU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954823B247B200F71097 /* ResponseAPDU.swift */; };
 		042B954F23B26DD500F71097 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954E23B26DD500F71097 /* CryptoUtils.swift */; };
@@ -51,6 +52,7 @@
 /* Begin PBXFileReference section */
 		042B954023B1531900F71097 /* DES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DES.swift; sourceTree = "<group>"; };
 		042B954223B159EF00F71097 /* ISO9797Alg3Mac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO9797Alg3Mac.swift; sourceTree = "<group>"; };
+		042B954423B15CF000F71097 /* MRTDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRTDUtils.swift; sourceTree = "<group>"; };
 		042B954623B1601400F71097 /* MRTDSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRTDSession.swift; sourceTree = "<group>"; };
 		042B954823B247B200F71097 /* ResponseAPDU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseAPDU.swift; sourceTree = "<group>"; };
 		042B955023B2A69500F71097 /* LDSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LDSFile.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			children = (
 				042B955023B2A69500F71097 /* LDSFile.swift */,
 				042B954623B1601400F71097 /* MRTDSession.swift */,
+				042B954423B15CF000F71097 /* MRTDUtils.swift */,
 				042B954823B247B200F71097 /* ResponseAPDU.swift */,
 				04FB795F23B0182A004D53A6 /* TLV.swift */,
 			);
@@ -325,6 +328,7 @@
 				042B954123B1531900F71097 /* DES.swift in Sources */,
 				04B93F6123ABABDA00BAFD54 /* Log.swift in Sources */,
 				04FB796023B0182A004D53A6 /* TLV.swift in Sources */,
+				042B954523B15CF000F71097 /* MRTDUtils.swift in Sources */,
 				045DAA64239D9CAD00DFFE40 /* JsonRpc.swift in Sources */,
 				04FB795023AE798C004D53A6 /* PassIdClient.swift in Sources */,
 				042B954F23B26DD500F71097 /* CryptoUtils.swift in Sources */,
