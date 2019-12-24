@@ -198,6 +198,14 @@ extension TLV {
         return (length, byteCount)
     }
 
+    // Returns encoded length
+    // Length must not be negative
+    static func encodeLength(_ length: Int) throws -> Data{
+        if length < 0 {
+            throw TLVError.InvalidLength
+        }
+        return try encodeLength(UInt(length))
+    }
 
     // Returns encoded length
     // Max length to encode = 0xFFFFFF
