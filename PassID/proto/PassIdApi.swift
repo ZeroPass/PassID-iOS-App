@@ -7,9 +7,19 @@
 //
 
 import Alamofire
-import Foundation
 import SwiftUI
 import SwiftyJSON
+
+
+extension Dictionary {
+    mutating func merge(_ dict: [Key: Value]){
+        for (k, v) in dict {
+            updateValue(v, forKey: k)
+        }
+    }
+}
+
+
 
 typealias ApiRequestID = JsonRpcRequest.ID
 
@@ -121,6 +131,72 @@ class PassIdApi {
     static private func getApiMethod(_ name: String) -> String {
         return "passID." + name
     }
+    
+    /* API: passID.getChallenge */
+    @discardableResult
+    func register(cid: CID, passportData: PassportData, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
+        
+        //dg15: DG15File, sod: SODFile, cid: CID, csigs: List<ByteArray>, dg14: DG14FileView? = null
+        guard let dg15 = passportData.ldsFiles[.efDG15] else {
+            return .number(-1)
+        }
+        
+        guard let sod = passportData.ldsFiles[.efSOD] else {
+            return .number(-1)
+        }
+        
+        guard let dg14 = passportData.ldsFiles[.efDG14] else {
+            return .number(-1)
+        }
+        
+        var params = ["dg15" : JSON(dg15.encoded.base64EncodedString())]
+        params.merge(["sod" : JSON(sod.encoded.base64EncodedString())])
+        params.merge(cid.toJSON().dictionary!)
+        params.merge(passportData.csigs.toJSON().dictionary!)
+        params.merge(["dg14" : JSON(dg14.encoded.base64EncodedString())])
+
+        return rpc.call(method: PassIdApi.getApiMethod("register"), params: JSON(params)) { response in
+            self.handleResponse(response, completion, valueConstructor: { json in
+                return ProtoSession(json: json)
+            })
+        }
+    }
+    
+    @discardableResult
+    func login(uid: UserId, cid: CID, csigs: ChallengeSigs, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
+        var params = uid.toJSON().dictionary!
+        params.merge(cid.toJSON().dictionary!)
+        params.merge(csigs.toJSON().dictionary!)
+
+        return rpc.call(method: PassIdApi.getApiMethod("login"), params: JSON(params)) { response in
+            self.handleResponse(response, completion, valueConstructor: { json in
+                
+                guard let key = SessionKey(json: json) else {
+                    return nil
+                }
+                
+                guard let expires = json["expires"].int else {
+                    return nil
+                }
+                return ProtoSession(uid: uid, key: key, expiration: Date(timeIntervalSince1970: TimeInterval(expires)))
+            })
+        }
+    }
+    
+    @discardableResult
+    func sayHello(s: ProtoSession, completion: @escaping (ApiResponse<String>)->Void) -> ApiRequestID {
+        let mac = s.getMAC(apiName: "sayHello", rawParams: s.uid.data)
+        var params = s.uid.toJSON().dictionary!
+        params.merge(mac.toJSON().dictionary!)
+
+        return rpc.call(method: PassIdApi.getApiMethod("sayHello"), params: JSON(params)) { response in
+            self.handleResponse(response, completion, valueConstructor: { json in
+                return json["msg"].string!
+            })
+        }
+    }
+    
+    
     
     func handleResponse<Value>(_ response: Result<JRPCResult, JRPCError>, _ completion: (ApiResponse<Value>)->Void, valueConstructor: (_ json: JSON) -> Value?) {
         var reqId: ApiRequestID? = nil
