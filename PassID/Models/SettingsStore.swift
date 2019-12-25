@@ -19,6 +19,7 @@ final class SettingsStore: ObservableObject {
     private enum Keys {
         static let timeout = "timeout"
         static let url     = "url"
+        static let mrzKey  = "mrzKey"
     }
 
     private let cancellable: Cancellable
@@ -49,4 +50,17 @@ final class SettingsStore: ObservableObject {
         set { defaults.set(newValue, forKey: Keys.url) }
         get { defaults.url(forKey: Keys.url) ?? SettingsStore.DEFAULT_URL }
     }
+    
+    var mrzKey: MRZKey? {
+        set {
+            defaults.set(
+                try? PropertyListEncoder().encode(newValue), forKey: Keys.mrzKey
+            )
+        }
+        get {
+            guard let data = defaults.data(forKey: Keys.mrzKey) else { return nil }
+            return try? PropertyListDecoder().decode(MRZKey.self, from: data)
+        }
+    }
+    
 }
