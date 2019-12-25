@@ -10,31 +10,29 @@ import CoreNFC
 public enum MRTDTagError: Error {
     case ResponseError(String)
     case InvalidResponse
+    case InvalidChallengeLength
     case UnexpectedError
     case NFCNotSupported
     case NoConnectedTag
     case UnableToProtectAPDU
     case UnableToUnprotectAPDU
-    case UnsupportedDataGroup
-    case DataGroupNotRead
     case UnknownTag
     case UnknownImageFormat
     case NotImplemented
 
     var value: String {
         switch self {
-        case .ResponseError(let errMsg): return errMsg
-        case .InvalidResponse: return "InvalidResponse"
-        case .UnexpectedError: return "UnexpectedError"
-        case .NFCNotSupported: return "NFCNotSupported"
-        case .NoConnectedTag: return "NoConnectedTag"
-        case .UnableToProtectAPDU: return "UnableToProtectAPDU"
-        case .UnableToUnprotectAPDU: return "UnableToUnprotectAPDU"
-        case .UnsupportedDataGroup: return "UnsupportedDataGroup"
-        case .DataGroupNotRead: return "DataGroupNotRead"
-        case .UnknownTag: return "UnknownTag"
-        case .UnknownImageFormat: return "UnknownImageFormat"
-        case .NotImplemented: return "NotImplemented"
+            case .ResponseError(let errMsg): return errMsg
+            case .InvalidResponse: return "InvalidResponse"
+            case .InvalidChallengeLength: return "InvalidChallengeLength"
+            case .UnexpectedError: return "UnexpectedError"
+            case .NFCNotSupported: return "NFCNotSupported"
+            case .NoConnectedTag: return "NoConnectedTag"
+            case .UnableToProtectAPDU: return "UnableToProtectAPDU"
+            case .UnableToUnprotectAPDU: return "UnableToUnprotectAPDU"
+            case .UnknownTag: return "UnknownTag"
+            case .UnknownImageFormat: return "UnknownImageFormat"
+            case .NotImplemented: return "NotImplemented"
         }
     }
 }
