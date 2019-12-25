@@ -10,8 +10,19 @@ import SwiftUI
 
 
 extension View {
-    func showAlert(_ alert: UIAlertController, animated: Bool = true) {
+    func showAlert(_ alert: AlertController, animated: Bool = true, bluredBackground: Bool = true) {
         if let controller = topMostViewController() {
+            if bluredBackground {
+                let blurEffectView = UIBlurView(withRadius: 3)
+                blurEffectView.frame = controller.view!.bounds
+                blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                
+                alert.onWillDisappear {_ in
+                    blurEffectView.removeFromSuperview()
+                }
+            
+                UIApplication.keyWindow!.addSubview(blurEffectView)
+            }
             controller.present(alert, animated: animated)
         }
     }
