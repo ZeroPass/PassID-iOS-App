@@ -13,7 +13,7 @@ import SwiftUI
 // TODO: constrain TextEdit to StringProtocol, Numeric and URL
 struct TextEdit<T> : View {
 
-    init(label: String, placeholder: String = "", value: Binding<T>) {
+    init(_ label: String? = nil, placeholder: String = "", value: Binding<T>) {
         self.label = label
         self.placeholder = placeholder
         self.value = value
@@ -51,9 +51,12 @@ struct TextEdit<T> : View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(label)
-                .font(.headline)
-
+            
+            if label != nil {
+                Text(label!)
+                    .font(.headline)
+            }
+            
             TextField(self.placeholder, text: self.valueProxy, onEditingChanged: { isEditing in
                 let resetValue = (self.valueProxy.wrappedValue.isEmpty //||
                    // self.value.wrappedValue is Numeric.self
@@ -67,9 +70,9 @@ struct TextEdit<T> : View {
                     self.value.wrappedValue = value
                 }
             })
-                .disableAutocorrection(true)
-                .keyboardType(self.keyboardType)
-                .textContentType(self.textContentType)
+            .disableAutocorrection(true)
+            .keyboardType(self.keyboardType)
+            .textContentType(self.textContentType)
         }
         // Finish editing if text edit is tapped.
         .onTapGesture { UIApplication.shared.sendAction(#selector(UIView.resignFirstResponder), to: nil, from: nil, for: nil) }
@@ -81,7 +84,7 @@ struct TextEdit<T> : View {
     private var maxLength: Int = -1
     private var validator: ((_ val: String) -> Bool)?
     
-    private var label: String
+    private var label: String?
     private var placeholder: String
     
     private var keyboardType: UIKeyboardType = .default
@@ -112,12 +115,12 @@ struct TextEdit<T> : View {
         }
     }
     
-    private func setValueFromString(newValue: String)  {
+    private func setValueFromString(newValue: String, forceSet: Bool = false)  {
         let valid = (validator != nil ? validator!(newValue) : true)
-        if  valid && (
+        if forceSet || (valid && (
             self.maxLength == -1 ||
             newValue.count <= self.maxLength  ||
-            newValue.count < self.valueProxy.wrappedValue.count)
+            newValue.count < self.valueProxy.wrappedValue.count))
         {
             if self.value.wrappedValue is String {
                 self.value.wrappedValue = newValue as! T
@@ -136,7 +139,14 @@ struct TextEdit<T> : View {
         }
         
         if newValue != getValueAsString() && !newValue.isEmpty {
+            // Restore value to previous and signal change to text renderer.
             self.value.wrappedValue = self.value.wrappedValue
+
+            // Hack: In case the above didn't work, temporarily clear current value to trigger change.
+            //       Won't work with number types.
+            let vcpy = valueProxy.wrappedValue
+            setValueFromString(newValue: "", forceSet: true)
+            valueProxy.wrappedValue = vcpy
         }
     }
     

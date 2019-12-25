@@ -20,12 +20,12 @@ struct SettingsSheet: View {
             NavigationView {
                 Form {
                     Section(header: Text("PassID Server")) {
-                        TextEdit(label: "Server URL", value: self.$settings.url)
+                        TextEdit("Server URL", value: self.$settings.url)
                             .defaultValue(SettingsStore.DEFAULT_URL)
                             .inputValidator({ v in return Utils.isValidUrl(v, forceAddressAndPort: false) })
                             .keyboardType(.URL)
                             .textContentType(.URL)
-                        TextEdit(label: "Timeout", placeholder: String(SettingsStore.DEFAULT_TIMEOUT), value: self.$settings.timeout)
+                        TextEdit("Timeout", placeholder: String(SettingsStore.DEFAULT_TIMEOUT), value: self.$settings.timeout)
                             .defaultValue(SettingsStore.DEFAULT_TIMEOUT)
                             .keyboardType(.decimalPad)
                             .minValue(1.0)
