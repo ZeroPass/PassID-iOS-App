@@ -26,7 +26,7 @@ public enum TLVError: Error {
 }
 
 
-struct TLV {
+open class TLV {
     
     let tag: UInt
     let value: Data
@@ -40,18 +40,17 @@ struct TLV {
 
 extension TLV {
     
-    init(encodedTLV: Data) throws {
+    convenience init(encodedTLV: Data) throws {
         try self.init(encodedTLV: encodedTLV.bytes)
     }
     
-    init(encodedTLV: ArraySlice<UInt8>) throws {
+    convenience init(encodedTLV: ArraySlice<UInt8>) throws {
         try self.init(encodedTLV: Array(encodedTLV))
     }
     
-    init(encodedTLV: [UInt8]) throws {
+    convenience init(encodedTLV: [UInt8]) throws {
         let tvPair = try TLV.decode(encodedTLV)
-        self.tag   = tvPair.0
-        self.value = tvPair.1
+        self.init(tag: tvPair.0, value: tvPair.1)
     }
     
     var encoded: Data {
