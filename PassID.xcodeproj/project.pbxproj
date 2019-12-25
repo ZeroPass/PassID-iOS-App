@@ -16,7 +16,12 @@
 		042B954D23B24C7D00F71097 /* MRTDTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954C23B24C7D00F71097 /* MRTDTag.swift */; };
 		042B954F23B26DD500F71097 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B954E23B26DD500F71097 /* CryptoUtils.swift */; };
 		042B955123B2A69500F71097 /* LDSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955023B2A69500F71097 /* LDSFile.swift */; };
+		042B955323B2AA7D00F71097 /* MRTDReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955223B2AA7D00F71097 /* MRTDReader.swift */; };
 		042B955523B2B7FF00F71097 /* MRZKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955423B2B7FF00F71097 /* MRZKey.swift */; };
+		042B955723B334FF00F71097 /* UIBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955623B334FF00F71097 /* UIBlurView.swift */; };
+		042B955923B3359000F71097 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955823B3359000F71097 /* AlertController.swift */; };
+		042B955C23B376B000F71097 /* PassportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955B23B376B000F71097 /* PassportData.swift */; };
+		042B955E23B3774C00F71097 /* ChallengeSigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B955D23B3774C00F71097 /* ChallengeSigs.swift */; };
 		04435F2D2396FEDD00DFFDFC /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */; };
 		04435F2F2397017900DFFDFC /* SettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04435F2E2397017900DFFDFC /* SettingsButton.swift */; };
 		0450F56F23A59E550094FFDA /* PassIdServer.der in Resources */ = {isa = PBXBuildFile; fileRef = 0450F56E23A59E550094FFDA /* PassIdServer.der */; };
@@ -62,7 +67,12 @@
 		042B954C23B24C7D00F71097 /* MRTDTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRTDTag.swift; sourceTree = "<group>"; };
 		042B954E23B26DD500F71097 /* CryptoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtils.swift; sourceTree = "<group>"; };
 		042B955023B2A69500F71097 /* LDSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LDSFile.swift; sourceTree = "<group>"; };
+		042B955223B2AA7D00F71097 /* MRTDReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRTDReader.swift; sourceTree = "<group>"; };
 		042B955423B2B7FF00F71097 /* MRZKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRZKey.swift; sourceTree = "<group>"; };
+		042B955623B334FF00F71097 /* UIBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlurView.swift; sourceTree = "<group>"; };
+		042B955823B3359000F71097 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
+		042B955B23B376B000F71097 /* PassportData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassportData.swift; sourceTree = "<group>"; };
+		042B955D23B3774C00F71097 /* ChallengeSigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeSigs.swift; sourceTree = "<group>"; };
 		0434B0102396E8510043D16D /* PassID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PassID.entitlements; sourceTree = "<group>"; };
 		04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		04435F2E2397017900DFFDFC /* SettingsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsButton.swift; sourceTree = "<group>"; };
@@ -112,6 +122,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		042B955A23B335A300F71097 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				042B955823B3359000F71097 /* AlertController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		0450F56923A2CC340094FFDA /* Certs */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +150,7 @@
 		045DAA5D239D674500DFFE40 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				042B955B23B376B000F71097 /* PassportData.swift */,
 				04435F2C2396FEDD00DFFDFC /* SettingsStore.swift */,
 				045DAA5E239D676000DFFE40 /* Utils.swift */,
 			);
@@ -141,6 +160,7 @@
 		045DAA60239D981500DFFE40 /* Proto */ = {
 			isa = PBXGroup;
 			children = (
+				042B955D23B3774C00F71097 /* ChallengeSigs.swift */,
 				045DAA65239E898E00DFFE40 /* JRPClient.swift */,
 				045DAA63239D9CAD00DFFE40 /* JsonRpc.swift */,
 				0450F57423A7E20A0094FFDA /* PassIdApi.swift */,
@@ -167,6 +187,7 @@
 				045DAA5B239D61A400DFFE40 /* TextEdit.swift */,
 				045DAA6723A1B92F00DFFE40 /* Toast.swift */,
 				04FB796323B061F5004D53A6 /* UIApplication+KeyWindow.swift */,
+				042B955623B334FF00F71097 /* UIBlurView.swift */,
 				04FB796123B05AF5004D53A6 /* View+ShowAlert.swift */,
 			);
 			path = Views;
@@ -191,6 +212,7 @@
 		048FDC8C2396D01E00B01339 /* PassID */ = {
 			isa = PBXGroup;
 			children = (
+				042B955A23B335A300F71097 /* Controllers */,
 				04FB795123AEB8AB004D53A6 /* Crypto */,
 				045DAA5D239D674500DFFE40 /* Models */,
 				04FB795E23B0180D004D53A6 /* MRTD */,
@@ -233,6 +255,7 @@
 			children = (
 				042B954A23B24C3500F71097 /* BAC.swift */,
 				042B955023B2A69500F71097 /* LDSFile.swift */,
+				042B955223B2AA7D00F71097 /* MRTDReader.swift */,
 				042B954623B1601400F71097 /* MRTDSession.swift */,
 				042B954C23B24C7D00F71097 /* MRTDTag.swift */,
 				042B954423B15CF000F71097 /* MRTDUtils.swift */,
@@ -323,6 +346,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				042B955723B334FF00F71097 /* UIBlurView.swift in Sources */,
 				04435F2F2397017900DFFDFC /* SettingsButton.swift in Sources */,
 				04435F2D2396FEDD00DFFDFC /* SettingsStore.swift in Sources */,
 				045DAA5C239D61A400DFFE40 /* TextEdit.swift in Sources */,
@@ -336,10 +360,12 @@
 				04FB796423B061F5004D53A6 /* UIApplication+KeyWindow.swift in Sources */,
 				04FB795B23AFCB12004D53A6 /* ButtonView.swift in Sources */,
 				042B954323B159EF00F71097 /* ISO9797Alg3Mac.swift in Sources */,
+				042B955323B2AA7D00F71097 /* MRTDReader.swift in Sources */,
 				042B954123B1531900F71097 /* DES.swift in Sources */,
 				04B93F6123ABABDA00BAFD54 /* Log.swift in Sources */,
 				04FB796023B0182A004D53A6 /* TLV.swift in Sources */,
 				042B954523B15CF000F71097 /* MRTDUtils.swift in Sources */,
+				042B955C23B376B000F71097 /* PassportData.swift in Sources */,
 				045DAA64239D9CAD00DFFE40 /* JsonRpc.swift in Sources */,
 				04FB795023AE798C004D53A6 /* PassIdClient.swift in Sources */,
 				042B954F23B26DD500F71097 /* CryptoUtils.swift in Sources */,
@@ -355,8 +381,10 @@
 				04D412CD23AE5BA3008D922D /* ActionView.swift in Sources */,
 				045DAA66239E898E00DFFE40 /* JRPClient.swift in Sources */,
 				04FB796223B05AF5004D53A6 /* View+ShowAlert.swift in Sources */,
+				042B955E23B3774C00F71097 /* ChallengeSigs.swift in Sources */,
 				045DAA5F239D676100DFFE40 /* Utils.swift in Sources */,
 				04FB795323AEB8DA004D53A6 /* RIPEMD160.swift in Sources */,
+				042B955923B3359000F71097 /* AlertController.swift in Sources */,
 				042B954D23B24C7D00F71097 /* MRTDTag.swift in Sources */,
 				04FB795923AEBBAB004D53A6 /* SessionKey.swift in Sources */,
 				04FB795523AEBB70004D53A6 /* UserId.swift in Sources */,
