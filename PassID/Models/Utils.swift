@@ -25,6 +25,13 @@ struct Utils {
         return result
     }
     
+    static func isValidPassportNumber(_ passportNumber: String, forceMinSize: Bool = true) -> Bool {
+        let pbnumRegx = "[A-Z0-9<]" + (forceMinSize ? "{9}" : "{1,9}")
+        let urlTest = NSPredicate(format:"SELF MATCHES %@", pbnumRegx)
+        let result = urlTest.evaluate(with: passportNumber)
+        return result
+    }
+    
     static func dataToHex(_ data: Data, upperCase: Bool = false) -> String {
         let hexDigits = upperCase ? Utils.hexDigitsUpper : Utils.hexDigitsLower
         var chars: [unichar] = []
