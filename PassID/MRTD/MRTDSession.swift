@@ -161,7 +161,7 @@ public class MRTDSession {
             
             let res = (CC == CCb)
             Log.verbose("\tCompare CC with data of DO'8E of RAPDU")
-            Log.verbose("\t\t%@ == %@ ? %@", CC.hex(), CCb.hex(), res)
+            //Log.verbose("\t\t%@ == %@ ? %@", CC.hex(), CCb.hex(), res)
             
             if !res {
                 throw MRTDSessionError.InvalidResponseChecksum
