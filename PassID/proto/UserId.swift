@@ -40,4 +40,11 @@ struct UserId : ProtoObject {
             UserId.serKey : self.data.base64EncodedString()
         ]
     }
+    
+    static func fromDG15(_ dg15: LDSFile) -> UserId? {
+        if dg15.fileTag != .efDG15 {
+            return nil
+        }
+        return UserId(data: RIPEMD160.hash(message: dg15.value))
+    }
 }
