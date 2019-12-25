@@ -15,7 +15,7 @@ struct SuccessView: View {
     
     var body: some View {
         VStack {
-
+            
             // Title
             Text("\(action == .register ? "Registration" : "Login") Succeeded")
                 .font(.largeTitle)
