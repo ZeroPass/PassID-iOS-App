@@ -103,3 +103,11 @@ public enum LDSFileTag : Int, CaseIterable {
         }
     }
 }
+
+
+
+class LDSFile: TLV {
+    var fileTag: LDSFileTag {
+        return LDSFileTag(rawValue: Int(tag))!
+    }
+}
