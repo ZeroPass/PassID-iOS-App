@@ -52,6 +52,28 @@ struct SessionMac : ProtoObject {
 struct ProtoSession {
     typealias hmac = HMAC<SHA256>
     
+    init(uid: UserId, key: SessionKey, expiration: Date) {
+        self.uid = uid
+        self.key = key
+        self.expiration = expiration
+    }
+    init?(json: JSON) {
+        
+        guard let uid = UserId(json: json)else {
+            return nil
+        }
+        
+        guard let key = SessionKey(json: json) else {
+            return nil
+        }
+        
+        guard let expires = json["expires"].int else {
+            return nil
+        }
+        
+        self.init(uid: uid, key: key, expiration: Date(timeIntervalSince1970: TimeInterval(expires)))
+    }
+    
     let uid: UserId
     let key: SessionKey
     let expiration: Date
