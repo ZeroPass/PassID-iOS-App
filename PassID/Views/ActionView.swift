@@ -43,6 +43,9 @@ struct ActionView: View {
     
     @State private var showActivity = false
     
+    @State var challenge: ProtoChallenge? = nil
+    @State var actionCompletionCallback: ((PassportData) -> ())? = nil
+    
     var body: some View {
         return Group {
             if actionSucceeded {
@@ -50,9 +53,15 @@ struct ActionView: View {
             }
             else {
                 ActivityView(msg: "Please wait ...", showActivity: $showActivity) {
-                    PassportView()
+                    PassportView(challenge: self.$challenge, action: self.action, settings: self.settings)
                         .onDismiss {
                             self.presentationMode.wrappedValue.dismiss()
+                        }
+                        .onPassportData { data in
+                            self.showActivity = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.actionCompletionCallback?(data)
+                            }
                         }
                     .navigationBarTitle(self.action.asString().capitalized)
                     .navigationBarItems(trailing:
@@ -75,8 +84,9 @@ struct ActionView: View {
                                 self.client.register()
                             )
                         case .login:
-                            self.log.error("Login is not implemented yet!")
-                            self.goBack()
+                            self.connectCallbacks(
+                                self.client.login()
+                            )
                     }
                 }
             }
@@ -87,7 +97,7 @@ struct ActionView: View {
         updateClient()
         client.onConnectionError { _, retry in
             self.showActivity = false
-            let alert = UIAlertController(title: "Connection Error", message: "Failed to connect to server", preferredStyle: .alert)
+            let alert = AlertController(title: "Connection Error", message: "Failed to connect to server", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Go Back", style: .cancel) { _ in
                 self.goBack()
             })
@@ -123,13 +133,24 @@ struct ActionView: View {
             }
     }
     
-    private func signChallenge(_ challenge: ProtoChallenge, _ completion: @escaping (/*PassportData*/) -> Void) {
+    private func signChallenge(_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) -> Void) {
         log.debug("Got challenge cid: %@ challenge: %@", challenge.id.data.hex(), challenge.data.hex())
-        Toast.show(message: "Got Challenge")
+        self.challenge = challenge
+        self.actionCompletionCallback = completion
     }
     
     private func handleSuccess(_ uid: UserId) {
         log.debug("PassId session was successfully created, uid: %@", uid.data.hex())
+        self.showActivity = true
+        self.client.requestGreeting { msg, error in
+            if error != nil {
+                self.handleError(error!)
+            }
+            else {
+                self.actionSucceeded = true
+                self.srvMsg = msg!
+            }
+        }
     }
     
     private func handleError(_ error: ApiError) {
@@ -169,7 +190,7 @@ struct ActionView: View {
     }
     
     private func showFatalAlert(title: String, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alert = AlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .cancel) { _ in
             self.goBack()
         })
