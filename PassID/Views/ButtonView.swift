@@ -11,8 +11,8 @@ import SwiftUI
 
 struct ButtonView: View {
     let text: String
-    let background: Color
-    let foreground: Color
+    var background: Color
+    var foreground: Color
     
     init(text: String, background: Color = Color(UIColor.darkGray), foreground: Color = .white){
         self.text = text
@@ -25,6 +25,18 @@ struct ButtonView: View {
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, maxHeight: 50, alignment: .center)
             .background(self.background)
             .foregroundColor(self.foreground)
+    }
+    
+    func foregroundColor(_ color: Color) -> ButtonView {
+        var copy = self
+        copy.foreground = color
+        return copy
+    }
+    
+    func background(_ color: Color) -> ButtonView {
+        var copy = self
+        copy.background = color
+        return copy
     }
 }
 
