@@ -13,6 +13,7 @@ struct ButtonView: View {
     let text: String
     var background: Color
     var foreground: Color
+    var disabled: Bool = false
     
     init(text: String){
         self.text = text
@@ -25,7 +26,7 @@ struct ButtonView: View {
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, maxHeight: 50, alignment: .center)
             .border(Color(UIColor.separator), width: 0.65)
             .background(self.background)
-            .foregroundColor(self.foreground)
+            .foregroundColor(self.disabled ? Color.secondary.opacity(0.25) : self.foreground)
     }
     
     func foregroundColor(_ color: Color) -> ButtonView {
@@ -37,6 +38,12 @@ struct ButtonView: View {
     func background(_ color: Color) -> ButtonView {
         var copy = self
         copy.background = color
+        return copy
+    }
+    
+    func disabled(_ disabled: Bool) -> ButtonView {
+        var copy = self
+        copy.disabled = disabled
         return copy
     }
 }

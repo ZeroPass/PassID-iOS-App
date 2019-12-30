@@ -83,14 +83,14 @@ struct PassportView: View {
                     }
                 }
             }
-            
+
             Button(action: {
                 let mrzKey = MRZKey(mrtdNumber: self.passportNum, dateOfBirth: self.dob, dateOfExpiry: self.doe)
                 self.settings.mrzKey = mrzKey
                 self.scanPassport(mrzKey: mrzKey)
             }){
                 ButtonView(text: "Scan Passport & \(self.action.asString().capitalized)")
-                .foregroundColor(self.validMRZData() ? .primary : Color.secondary.opacity(0.25))
+                    .disabled(!validMRZData())
             }.disabled(!validMRZData())
             
             Spacer()
