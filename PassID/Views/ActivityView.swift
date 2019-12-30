@@ -91,7 +91,7 @@ struct ActivityView<Content>: View where Content: View {
                 
                 if self.showActivity {
                    VStack {
-                        ActivityIndicator()
+                        ActivityIndicator2()
                         Text(self.msg)
                            .padding(.horizontal, 20)
                    }
