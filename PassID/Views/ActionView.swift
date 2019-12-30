@@ -199,6 +199,11 @@ struct ActionView: View {
                     msg = "Account already exists!"
                 case 412:
                     msg = "Passport trust chain verification failed!"
+                case 498:
+                    msg = apiError.message
+                    if let _ = apiError.message.range(of: "account has expired", options: .caseInsensitive) {
+                        msg = "Account has expired, please register again!"
+                    }
                 default:
                     title = "API Error"
             }
