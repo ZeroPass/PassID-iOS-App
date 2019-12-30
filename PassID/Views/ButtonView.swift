@@ -23,6 +23,7 @@ struct ButtonView: View {
     var body: some View {
         Text(self.text)
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, maxHeight: 50, alignment: .center)
+            .border(Color(UIColor.separator), width: 0.65)
             .background(self.background)
             .foregroundColor(self.foreground)
     }
