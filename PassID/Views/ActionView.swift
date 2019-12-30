@@ -178,8 +178,7 @@ struct ActionView: View {
                 case 412:
                     msg = "Passport trust chain verification failed!"
                 default:
-                    title = msg!
-                    msg = nil
+                    title = "API Error"
             }
             showFatalAlert(title: title, message: msg)
         case .rpcError(let rpcError):
