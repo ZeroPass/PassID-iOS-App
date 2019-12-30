@@ -164,7 +164,6 @@ extension MRTDReader : NFCTagReaderSessionDelegate {
             }
             
             self.readerSession?.alertMessage = "Authenticating with passport.....\n"
-
             self.tag = MRTDTag(tag: mrtdTag)
             self.tag!.progress = { [unowned self] (progress) in
                 self.updateReaderAlertProgress(progressPercentage: progress)
@@ -201,27 +200,6 @@ extension MRTDReader {
         }
     }
     
-
-    
-//    func doActiveAuthenticationIfNeccessary( completed: @escaping ()->() ) {
-//        guard self.passport.activeAuthenticationSupported else {
-//            completed()
-//            return
-//        }
-//
-//        Log.info( "Performing Active Authentication" )
-//
-//        let challenge = generateRandomUInt8Array(8)
-//        self.tagReader?.doInternalAuthentication(challenge: challenge, completed: { (response, err) in
-//            if let response = response {
-//                self.passport.verifyActiveAuthentication( challenge:challenge, signature:response.data )
-//            }
-//
-//            completed()
-//        })
-//
-//    }
-    
     private func doBAC(completed: @escaping (MRTDTagError?)->()) {
         guard let tag = self.tag else {
             completed(MRTDTagError.NoConnectedTag)
@@ -229,7 +207,6 @@ extension MRTDReader {
         }
         
         Log.debug("Starting Basic Access Control (BAC)")
-
         self.bacHandler = BAC(mrtdTag: tag)
         bacHandler?.initSession(mrzKey: mrzKey) { error in
             self.bacHandler = nil
@@ -237,7 +214,7 @@ extension MRTDReader {
         }
     }
     
-    func readNextFile( completedReadingFiles completed: @escaping (MRTDTagError?)->() ) {
+    func readNextFile(completedReadingFiles completed: @escaping (MRTDTagError?)->() ) {
         guard let tagReader = self.tag else { completed(MRTDTagError.NoConnectedTag ); return }
         if filesToRead.count == 0 {
             completed(nil)
@@ -248,24 +225,12 @@ extension MRTDReader {
         Log.debug("Reading tag - %@", "\(tag)" )
         elementReadAttempts += 1
 
-        tagReader.readLDSFile(tag:tag) { [unowned self] (resp, err) in
+        tagReader.readLDSFile(tag: tag) { [unowned self] (resp, err) in
             self.updateReaderAlertProgress(progressPercentage: 100 )
             if let resp = resp {
                 do {
-                    //let dg = try DataGroupParser().parseDG(data: response)
-                    self.ldsFiles[tag] =  try LDSFile(encodedTLV: resp)
-
-                    /*if let com = dg as? efCOM {
-                        let foundDGs = [.COM, .SOD] + com.dataGroupsPresent.map { LDSFileTag.fromName(name:$0) }
-                        if self.readAllDatagroups == true {
-                            self.dataGroupsToRead = foundDGs
-                        }
-                        else {
-                            // We are reading specific datagroups but remove all the ones we've requested to be read that aren't actually available
-                            self.dataGroupsToRead = self.dataGroupsToRead.filter { foundDGs.contains($0) }
-                        }
-                    }*/
-
+                    Log.verbose("Parsing read LDS file: %@", tag.name())
+                    self.ldsFiles[tag] = try LDSFile(encodedTLV: resp)
                 }
                 catch let error as MRTDTagError {
                     Log.error("MRTDTagError reading tag - %@", "\(error)")
@@ -292,7 +257,7 @@ extension MRTDReader {
 
                 // OK we had an error - depending on what happened, we may want to try to re-read this
                 // E.g. we failed to read the last Datagroup because its protected and we can't
-                let errMsg = err?.value ?? "Unknown  error"
+                let errMsg = err?.value ?? "Unknown error"
                 print( "ERROR - \(errMsg)" )
                 if errMsg == "Session invalidated" || errMsg == "Class not supported" || errMsg == "Tag connection lost"  {
                     // Can't go any more!
