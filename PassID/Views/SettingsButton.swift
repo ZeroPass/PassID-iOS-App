@@ -30,28 +30,28 @@ struct SettingsSheet: View {
                             .keyboardType(.decimalPad)
                             .minValue(1.0)
                             .maxValue(99.9)
-                    }
+                    
 
-                    Button(action: {
-                        self.showActivity = true
-                        let api = PassIdApi(url: self.settings.url, timeout: self.settings.timeout)
-                        api.ping(ping: UInt32.random(in: 0..<UInt32.max)) { response in
-                            self.showActivity = false
-                            if response.value != nil {
-                                Toast.show(message: "Connection succeeded!")
+                        Button(action: {
+                            self.showActivity = true
+                            let api = PassIdApi(url: self.settings.url, timeout: self.settings.timeout)
+                            api.ping(ping: UInt32.random(in: 0..<UInt32.max)) { response in
+                                self.showActivity = false
+                                if response.value != nil {
+                                    Toast.show(message: "Connection succeeded!")
+                                }
+                                else {
+                                    Toast.show(message: "Connection failed!")
+                                }
                             }
-                            else {
-                                Toast.show(message: "Connection failed!")
+                        }) {
+                            HStack(alignment: .center) {
+                                Spacer()
+                                Text("Test Connection")
+                                Spacer()
                             }
-                        }
-                    }) {
-                        HStack(alignment: .center) {
-                            Spacer()
-                            Text("Test Connection Settings")
-                            Spacer()
                         }
                     }
-                    .padding()
                 }
                 .navigationBarTitle(Text("Settings"))
                 .navigationBarItems(trailing: Button(action: { self.presentationMode.wrappedValue.dismiss() }) {
