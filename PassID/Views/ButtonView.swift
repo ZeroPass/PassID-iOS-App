@@ -14,10 +14,10 @@ struct ButtonView: View {
     var background: Color
     var foreground: Color
     
-    init(text: String, background: Color = Color(UIColor.darkGray), foreground: Color = .white){
+    init(text: String){
         self.text = text
-        self.background = background
-        self.foreground = foreground
+        self.background = Color(UIColor.tertiarySystemBackground)
+        self.foreground = .primary
     }
     
     var body: some View {
