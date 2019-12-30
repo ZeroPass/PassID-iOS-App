@@ -44,7 +44,7 @@ struct ActionView: View {
     @State private var showActivity = false
     
     @State var challenge: ProtoChallenge? = nil
-    @State var actionCompletionCallback: ((PassportData) -> ())? = nil
+    @State var initiatePassIdSession: ((PassportData) -> ())? = nil
     
     var body: some View {
         return Group {
@@ -60,7 +60,7 @@ struct ActionView: View {
                         .onPassportData { data in
                             self.showActivity = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.actionCompletionCallback?(data)
+                                self.initiatePassIdSession?(data)
                             }
                         }
                     .navigationBarTitle(self.action.asString().capitalized)
@@ -109,7 +109,23 @@ struct ActionView: View {
                 retry(true)
             })
             self.showAlert(alert)
-       }
+        }
+        client.onDG1Requested { sendDG1 in
+             self.showActivity = false
+             let alert = AlertController(
+                 title: "Personal Data Requested",
+                 message: "Server requested your personal data.\n\nSend personal data to server?",
+                 preferredStyle: .alert
+            )
+             alert.addAction(UIAlertAction(title: "Go Back", style: .cancel) { _ in
+                 self.goBack()
+             })
+             alert.addAction(UIAlertAction(title: "Send", style: .default) {_ in
+                 self.showActivity = true
+                 sendDG1(true)
+             })
+             self.showAlert(alert)
+        }
     }
     
     func updateClient() {
@@ -124,27 +140,28 @@ struct ActionView: View {
     private func connectCallbacks(_ promise: PassIdClient.SessionPromise) {
         promise
             .onChallenge{ challenge, cb in
-                self.showActivity = false
-                self.signChallenge(challenge, cb)
+                self.setChallenge(challenge, cb)
             }
             .onSuccess{ uid in
                 self.handleSuccess(uid)
             }
             .onError{ error in
-                self.showActivity = true
                 self.handleError(error)
             }
     }
     
-    private func signChallenge(_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) -> Void) {
+    private func setChallenge(_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) -> Void) {
         log.debug("Got challenge cid: %@ challenge: %@", challenge.id.data.hex(), challenge.data.hex())
+        self.showActivity = false
         self.challenge = challenge
-        self.actionCompletionCallback = completion
+        self.initiatePassIdSession = completion
     }
     
     private func handleSuccess(_ uid: UserId) {
         log.debug("PassId session was successfully created, uid: %@", uid.data.hex())
-        self.showActivity = true
+        showActivity = true
+        challenge = nil
+        initiatePassIdSession = nil
         self.client.requestGreeting { msg, error in
             if error != nil {
                 self.handleError(error!)
@@ -159,6 +176,8 @@ struct ActionView: View {
     private func handleError(_ error: ApiError) {
         log.error("Failed to create passId session! error: '%@'", error.localizedDescription)
         self.showActivity = false
+        challenge = nil
+        initiatePassIdSession = nil
         switch error {
         case .apiError(let apiError):
             var title = "PassID Error"

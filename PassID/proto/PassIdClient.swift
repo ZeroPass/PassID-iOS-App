@@ -30,8 +30,10 @@ final class PassIdClient {
     
     private let api: PassIdApi
     private var challenge: ProtoChallenge? = nil
-    private var connectionErrorCallback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> Void)? = nil
     private var session: ProtoSession? = nil
+    
+    private var connectionErrorCallback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> ())? = nil
+    private var dg1RequestCallback: ((_ completion: @escaping (_ sendDG1: Bool) -> Void) -> ())? = nil
 }
 
 extension PassIdClient {
@@ -63,8 +65,14 @@ extension PassIdClient {
 extension PassIdClient {
     
     @discardableResult
-    func onConnectionError(callback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> Void)?) -> PassIdClient {
+    func onConnectionError(callback: ((_ error: AFError, _ completion: @escaping (Retry) -> ()) -> Void)?) -> PassIdClient {
         self.connectionErrorCallback = callback
+        return self
+    }
+    
+    @discardableResult
+    func onDG1Requested(callback: @escaping (_ completion: @escaping (_ sendDG1: Bool) -> Void) -> ()) -> PassIdClient {
+        self.dg1RequestCallback = callback
         return self
     }
     
@@ -84,6 +92,7 @@ extension PassIdClient {
                 scb.challenge(self.challenge!) { [weak self] data in
                     self?.requestRegister(cid: (self?.challenge!.id)!, passportData: data) {
                         [weak self] error in
+                        self?.challenge = nil
                         if error != nil {
                             scb.error(error!)
                         }
@@ -92,7 +101,7 @@ extension PassIdClient {
                                 scb.success(self!.session!.uid)
                             }
                         }
-                     }
+                    }
                 }
             }
         }
@@ -103,24 +112,25 @@ extension PassIdClient {
     func login() -> SessionPromise {
         let scb = SessionPromise()
         requestChallenge{ error in
-          if error != nil {
-              scb.error(error!)
-          }
-          else {
-              scb.challenge(self.challenge!) { [weak self] data in
-                  self?.requestLogin(cid: (self?.challenge!.id)!, passportData: data) {
-                      [weak self] error in
-                      if error != nil {
-                          scb.error(error!)
-                      }
-                      else {
-                          if self != nil {
-                              scb.success(self!.session!.uid)
-                          }
-                      }
-                   }
-              }
-          }
+            if error != nil {
+                scb.error(error!)
+            }
+            else {
+                scb.challenge(self.challenge!) { [weak self] data in
+                    self?.requestLogin(cid: (self?.challenge!.id)!, passportData: data) {
+                        [weak self] error in
+                        self?.challenge = nil
+                        if error != nil {
+                            scb.error(error!)
+                        }
+                        else {
+                            if self != nil {
+                                scb.success(self!.session!.uid)
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return scb
@@ -134,7 +144,7 @@ extension PassIdClient {
                 completion(nil, resp.error)
                 return
             }
-            completion(greeting,nil)
+            completion(greeting, nil)
         }
     }
 }
@@ -164,41 +174,59 @@ extension PassIdClient.SessionPromise {
 extension PassIdClient {
 
     private func requestChallenge(_ completion: @escaping (_ error: ApiError?) -> Void) {
-        retriableCall({ rh in
-            self.api.getChallenge { r in rh(r) }
-        }) { resp in
+        retriableCall({ [weak self] rh in
+            self?.api.getChallenge { r in rh(r) }
+        }) { [weak self] resp in
             guard let challenge = resp.value else {
                 completion(resp.error)
                 return
             }
-            self.challenge = challenge
+            self?.challenge = challenge
             completion(nil)
         }
     }
     
     private func requestRegister(cid: CID, passportData data: PassportData, _ completion: @escaping (_ error: ApiError?) -> Void) {
-        retriableCall({ rh in
-            self.api.register(cid: cid, passportData: data) { r in rh(r) }
-        }) { resp in
+        retriableCall({ [weak self] rh in
+            self?.api.register(cid: cid, passportData: data) { r in rh(r) }
+        }) { [weak self] resp in
             guard let session = resp.value else {
                 completion(resp.error)
                 return
             }
-            self.session = session
+            self?.session = session
             completion(nil)
         }
     }
     
-    private func requestLogin(cid: CID, passportData data: PassportData, _ completion: @escaping (_ error: ApiError?) -> Void) {
-        retriableCall({ rh in
-            // TODO safely check dg15 is in ldsFiles
-            self.api.login(uid: UserId.fromDG15(data.ldsFiles[.efDG15]!)!, cid: cid, csigs: data.csigs) { r in rh(r) }
-        }) { resp in
+    private func requestLogin(cid: CID, passportData data: PassportData, sendDG1: Bool = false, _ completion: @escaping (_ error: ApiError?) -> Void) {
+        retriableCall({ [weak self] rh in
+            // TODO safely check dg1 & dg15 is in ldsFiles
+            self?.api.login(uid: UserId.fromDG15(data.ldsFiles[.efDG15]!)!, dg1: sendDG1 ? data.ldsFiles[.efDG1]! : nil, cid: cid, csigs: data.csigs) { r in rh(r) }
+        }) { [weak self] resp in
             guard let session = resp.value else {
-                completion(resp.error)
+                switch resp.error {
+                case .apiError(let apiError):
+                    if apiError.code != 428 {
+                        completion(resp.error)
+                    }
+                    else { // Handle request for DG1 file
+                        self?.dg1Requested { sendDG1 in
+                            if sendDG1 {
+                                self?.requestLogin(cid: cid, passportData: data, sendDG1: true, completion)
+                            }
+                            else {
+                                completion(resp.error)
+                            }
+                        }
+                    }
+                default:
+                    completion(resp.error)
+                }
+                
                 return
             }
-            self.session = session
+            self?.session = session
             completion(nil)
         }
     }
@@ -224,6 +252,15 @@ extension PassIdClient {
     private func connectionFailed(_ error: AFError, _ completion: @escaping (Retry) -> Void) {
         if connectionErrorCallback != nil {
             connectionErrorCallback!(error, completion)
+        }
+        else {
+            completion(false)
+        }
+    }
+    
+    private func dg1Requested(_ completion: @escaping (_ sendDG1: Bool) -> Void) {
+        if dg1RequestCallback != nil {
+            dg1RequestCallback!(completion)
         }
         else {
             completion(false)

@@ -135,8 +135,6 @@ class PassIdApi {
     /* API: passID.getChallenge */
     @discardableResult
     func register(cid: CID, passportData: PassportData, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
-        
-        //dg15: DG15File, sod: SODFile, cid: CID, csigs: List<ByteArray>, dg14: DG14FileView? = null
         guard let dg15 = passportData.ldsFiles[.efDG15] else {
             return .number(-1)
         }
@@ -163,14 +161,17 @@ class PassIdApi {
     }
     
     @discardableResult
-    func login(uid: UserId, cid: CID, csigs: ChallengeSigs, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
+    func login(uid: UserId, dg1: LDSFile? = nil, cid: CID, csigs: ChallengeSigs, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
         var params = uid.toJSON().dictionary!
         params.merge(cid.toJSON().dictionary!)
         params.merge(csigs.toJSON().dictionary!)
+        
+        if dg1 != nil {
+            params.merge(["dg1" : JSON(dg1!.encoded.base64EncodedString())])
+        }
 
         return rpc.call(method: PassIdApi.getApiMethod("login"), params: JSON(params)) { response in
             self.handleResponse(response, completion, valueConstructor: { json in
-                
                 guard let key = SessionKey(json: json) else {
                     return nil
                 }
