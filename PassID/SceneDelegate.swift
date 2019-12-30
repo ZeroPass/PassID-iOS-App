@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftUI
+import CoreNFC
+
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -27,6 +29,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
+        }
+        
+        if !NFCTagReaderSession.readingAvailable  {
+            Log.error("This device doesn't support NFC communication, app cannot continue!")
+            
+            let alert = AlertController(title: "Fatal Error", message: "Your device doesn't support NFC!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Exit", style: .destructive))
+            alert.onWillDisappear {_ in
+                exit(0)
+            }
+            
+            let blurEffectView = UIBlurView(withRadius: 3)
+            blurEffectView.frame = window!.rootViewController!.view!.bounds
+            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    
+            window!.addSubview(blurEffectView)
+            window!.rootViewController!.present(alert, animated: true)
         }
     }
 
