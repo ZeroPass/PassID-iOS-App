@@ -69,10 +69,11 @@ public class MRTDReader: NSObject {
     }
     
     private func doAuthenticateChallenges(_ cc: [[UInt8]], ccSigs: ChallengeSigs, completion: @escaping (ChallengeSigs?, MRTDTagError?)->()) {
+        let progress = Int(Double(ccSigs.sigs.count) / Double(ccSigs.sigs.count + cc.count) * 100)
+        Log.verbose("signing progress: %d", progress)
+        updateReaderAlertProgress(progressPercentage: progress)
         
-        updateReaderAlertProgress(progressPercentage: (ccSigs.sigs.count / (ccSigs.sigs.count + cc.count))*100)
         if cc.count == 0 {
-            updateReaderAlertProgress(progressPercentage: 100)
             DispatchQueue.main.async {
                 completion(ccSigs, nil)
             }
