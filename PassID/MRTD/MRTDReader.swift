@@ -6,8 +6,6 @@ import UIKit
 import CoreNFC
 
 
-
-
 @available(iOS 13, *)
 public class MRTDReader: NSObject {
     
@@ -24,7 +22,7 @@ public class MRTDReader: NSObject {
     private var mrzKey : MRZKey!
     
     private var sessionEstablishedCallback: ((MRTDTagError?)->())!
-
+    let log = Log(category: "mrtd.reader")
     
     public func endSession(withError error: String? = nil) {
         self.readerSession?.alertMessage = ""
@@ -37,18 +35,16 @@ public class MRTDReader: NSObject {
     }
     
     public func startSession(mrzKey : MRZKey, completed: @escaping (MRTDTagError?)->()) {
-        self.mrzKey = mrzKey
-        sessionEstablishedCallback = completed
-        
-        guard NFCNDEFReaderSession.readingAvailable else {
-            completed(MRTDTagError.NFCNotSupported)
-            return
-        }
-        
         if NFCTagReaderSession.readingAvailable {
+            self.mrzKey = mrzKey
+            sessionEstablishedCallback = completed
             readerSession = NFCTagReaderSession(pollingOption: [.iso14443], delegate: self, queue: nil)
             readerSession?.alertMessage = "Hold your iPhone near NFC enabled passport."
             readerSession?.begin()
+        }
+        else {
+            completed(MRTDTagError.NFCNotSupported)
+            return
         }
     }
     
@@ -70,7 +66,7 @@ public class MRTDReader: NSObject {
     
     private func doAuthenticateChallenges(_ cc: [[UInt8]], ccSigs: ChallengeSigs, completion: @escaping (ChallengeSigs?, MRTDTagError?)->()) {
         let progress = Int(Double(ccSigs.sigs.count) / Double(ccSigs.sigs.count + cc.count) * 100)
-        Log.verbose("signing progress: %d", progress)
+        log.verbose("signing progress: %d", progress)
         updateReaderAlertProgress(progressPercentage: progress)
         
         if cc.count == 0 {
@@ -129,18 +125,18 @@ extension MRTDReader : NFCTagReaderSessionDelegate {
     public func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
         // If necessary, you may perform additional operations on session start.
         // At this point RF polling is enabled.
-        Log.debug("tagReaderSessionDidBecomeActive")
+        log.debug("tagReaderSessionDidBecomeActive")
     }
     
     public func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
         // If necessary, you may handle the error. Note session is no longer valid.
         // You must create a new session to restart RF polling.
-        Log.debug("tagReaderSession:didInvalidateWithError - %@", "\(error)")
+        log.debug("tagReaderSession:didInvalidateWithError - %@", "\(error)")
         self.readerSession = nil
     }
     
     public func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
-        Log.debug("tagReaderSession:didDetect - %@", "\(tags[0])")
+        log.debug("tagReaderSession:didDetect - %@", "\(tags[0])")
         if tags.count > 1 {
             session.alertMessage = "More than 1 tags was found. Please present only 1 tag."
             return
@@ -188,10 +184,10 @@ extension MRTDReader {
         // TODO: try establish session via PACE first
         doBAC { [weak self] error in
             if error == nil {
-                Log.debug("session established via BAC")
+                self?.log.debug("session established via BAC")
             }
             else {
-                Log.error("Failed to establish session via BAC")
+                self?.log.error("Failed to establish session via BAC")
                 self?.readerSession?.invalidate(errorMessage: "There was a problem reading the passport. Please try again" )
             }
             DispatchQueue.main.async {
@@ -206,7 +202,7 @@ extension MRTDReader {
             return
         }
         
-        Log.debug("Starting Basic Access Control (BAC)")
+        log.debug("Starting Basic Access Control (BAC)")
         self.bacHandler = BAC(mrtdTag: tag)
         bacHandler?.initSession(mrzKey: mrzKey) { error in
             self.bacHandler = nil
@@ -222,28 +218,28 @@ extension MRTDReader {
         }
 
         let tag = filesToRead[0]
-        Log.debug("Reading tag - %@", "\(tag)" )
+        log.debug("Reading tag - %@", "\(tag)" )
         elementReadAttempts += 1
 
         tagReader.readLDSFile(tag: tag) { [unowned self] (resp, err) in
             self.updateReaderAlertProgress(progressPercentage: 100 )
             if let resp = resp {
                 do {
-                    Log.verbose("Parsing read LDS file: %@", tag.name())
+                    self.log.verbose("Parsing read LDS file: %@", tag.name())
                     self.ldsFiles[tag] = try LDSFile(encodedTLV: resp)
                 }
                 catch let error as MRTDTagError {
-                    Log.error("MRTDTagError reading tag - %@", "\(error)")
+                    self.log.error("MRTDTagError reading tag - %@", "\(error)")
                     completed(error)
                     return
                 }
                 catch let error as TLVError {
-                    Log.error("MRTDTagError failed to parse LDS file tag - %@", "\(error)")
+                    self.log.error("MRTDTagError failed to parse LDS file tag - %@", "\(error)")
                     completed(.ResponseError(error.value))
                     return
                 }
                 catch let error {
-                    Log.error("Unexpected error reading tag - %@", "\(error)")
+                    self.log.error("Unexpected error reading tag - %@", "\(error)")
                     completed(.ResponseError("\(error)"))
                     return
                 }
