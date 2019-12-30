@@ -91,6 +91,9 @@ struct ActionView: View {
                 }
             }
         }
+        .background(
+            Color(UIColor.systemGray6).edgesIgnoringSafeArea(.all)
+        )
     }
     
     func initClient() {

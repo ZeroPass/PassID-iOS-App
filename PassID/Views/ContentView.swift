@@ -32,6 +32,9 @@ struct ContentView: View {
             }
             .navigationBarTitle("PassID")
             .navigationBarItems(trailing: SettingsButton())
+            .background(
+                Color(UIColor.systemGray6).edgesIgnoringSafeArea(.all)
+            )
         }
     }
 }
