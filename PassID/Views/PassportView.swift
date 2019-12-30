@@ -42,44 +42,58 @@ struct PassportView: View {
         VStack {
             Spacer()
                 .frame(height: 20)
-            Text("Enter passport details")
-                .foregroundColor(.secondary)
-                .font(.title)
-            
             Form {
-                HStack {
-                    Text("Passport Number")
-                        Spacer()
-                    TextEdit(placeholder: "<<<<<<<<<", value: $passportNum)
-                        .keyboardType(.asciiCapable)
-                        .textContentType(.name)
-                        .inputValidator({ v in return Utils.isValidPassportNumber(v, forceMinSize: false) })
-                        .foregroundColor(.primary)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 125)
+                Section(header: HStack {
+                    Spacer()
+                    Text("Enter passport details")
+                        .foregroundColor(.secondary)
+                        .font(.title)
+                    Spacer()
+                }) {
+                    HStack {
+                        Text("Passport Number")
+                            Spacer()
+                        TextEdit(placeholder: "<<<<<<<<<", value: $passportNum)
+                            .keyboardType(.asciiCapable)
+                            .textContentType(.name)
+                            .inputValidator({ v in return Utils.isValidPassportNumber(v, forceMinSize: false) })
+                            .multilineTextAlignment(.trailing)
+                            .foregroundColor(.primary)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(width: 125)
+                    }.padding([.leading, .trailing])
+                    .listRowBackground(Color(UIColor.tertiarySystemBackground))
+                    
+                    DatePicker(selection: $dob, in: ...PassportView.decadeAgo, displayedComponents: .date) {
+                        Text("Date of Birth")
+                            .foregroundColor(.primary)
+                    }
+                    .padding([.leading, .trailing])
+                    .foregroundColor(Color.blue)
+                    .listRowBackground(Color(UIColor.tertiarySystemBackground))
+                    
+                    DatePicker(selection: $doe, in: PassportView.tomorrow..., displayedComponents: .date) {
+                        Text("Date of Expiry")
+                            .foregroundColor(.primary)
+                    }
+                    .padding([.leading, .trailing])
+                    .foregroundColor(Color.blue)
+                    .listRowBackground(Color(UIColor.tertiarySystemBackground))
 
-                }.padding([.leading, .trailing])
-                
-                DatePicker("Date of Birth", selection: $dob, in: ...PassportView.decadeAgo, displayedComponents: .date)
-                    .padding([.leading, .trailing])
-                
-                DatePicker("Date Of Expiry", selection: $doe, in: PassportView.tomorrow..., displayedComponents: .date)
-                    .padding([.leading, .trailing])
-                
-                if settings.mrzKey != nil {
-                    Button(action: {
-                        let mrzKey = self.settings.mrzKey!
-                        self.passportNum = mrzKey.mrtdNumber()
-                        self.dob = mrzKey.dateOfBirth()
-                        self.doe = mrzKey.dateOfExpiry()
-                        
-                    }){
-                        HStack {
-                            Spacer()
-                            Text("Fill from storage")
-                                .foregroundColor(.primary)
-                            Spacer()
+                    if settings.mrzKey != nil {
+                        Button(action: {
+                            let mrzKey = self.settings.mrzKey!
+                            self.passportNum = mrzKey.mrtdNumber()
+                            self.dob = mrzKey.dateOfBirth()
+                            self.doe = mrzKey.dateOfExpiry()
+                        }){
+                            HStack {
+                                Spacer()
+                                Text("Fill from storage")
+                                Spacer()
+                            }
                         }
+                        .listRowBackground(Color(UIColor.tertiarySystemBackground))
                     }
                 }
             }
