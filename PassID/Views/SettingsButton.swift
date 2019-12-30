@@ -47,7 +47,7 @@ struct SettingsSheet: View {
                     }) {
                         HStack(alignment: .center) {
                             Spacer()
-                            Text("Test Connection")
+                            Text("Test Connection Settings")
                             Spacer()
                         }
                     }
