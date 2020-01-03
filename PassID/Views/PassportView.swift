@@ -135,7 +135,7 @@ struct PassportView: View {
                             Log.warning("Error: Not all files were read from passport!")
                             var errorMsg = "Not all files were read from passport.\nPlease try again!"
                             if ldsFiles.contains(.efCOM) {
-                                let com: EfCOM = try! ldsFiles[.efCOM]!.asFile()
+                                let com = try! ldsFiles[.efCOM]!.asFile() as EfCOM
                                 if !com.tags.contains(.efDG15) {
                                     errorMsg = "Unsupported Passport!"
                                 }
