@@ -9,12 +9,20 @@
 import Foundation
 
 
-// method: merge
+// method: merge, operator += && operator +
 extension Dictionary {
     mutating func merge(_ dict: [Key: Value]){
         for (k, v) in dict {
             updateValue(v, forKey: k)
         }
+    }
+    
+    static func + (_ lhs: [Key: Value], _ rhs: [Key: Value]) -> Dictionary {
+        var lhs = lhs
+        for (k, v) in rhs {
+            lhs.updateValue(v, forKey: k)
+        }
+        return lhs
     }
 }
 
