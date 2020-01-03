@@ -129,16 +129,18 @@ struct PassportView: View {
                 self.mrtd.readLDSFiles(tags: [.efCOM, .efSOD, .efDG1, .efDG14, .efDG15]) {(ldsFiles, error) in
                     if error != nil {
                         Log.error("%@", error!.localizedDescription)
-                        let alert = AlertController(title: "Error", message: "Error reading files from passport.\nPlease try again!", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
-                        PassportView.dispatchOnMainQueue {
-                            self.showAlert(alert)
-                        }
                     }
                     else {
                         if ldsFiles.count != 5 {
                             Log.warning("Error: Not all files were read from passport!")
-                            self.mrtd.endSession(withError: "Not all files were read from passport.\nPlease try again!") // TODO: Add error message
+                            var errorMsg = "Not all files were read from passport.\nPlease try again!"
+                            if ldsFiles.contains(.efCOM) {
+                                let com: EfCOM = try! ldsFiles[.efCOM]!.asFile()
+                                if !com.tags.contains(.efDG15) {
+                                    errorMsg = "Unsupported Passport!"
+                                }
+                            }
+                            self.mrtd.endSession(withError: errorMsg)
                         }
                         else {
                             self.mrtd.internalAuthenticate(challenge: self.challenge.wrappedValue!.data) { csigs, error in
