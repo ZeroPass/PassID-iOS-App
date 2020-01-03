@@ -188,7 +188,7 @@ extension MRTDReader {
             }
             else {
                 self?.log.error("Failed to establish session via BAC")
-                self?.readerSession?.invalidate(errorMessage: "There was a problem reading the passport. Please try again" )
+                self?.readerSession?.invalidate(errorMessage: "There was a problem reading the passport. Please verify inputed data and try again" )
             }
             DispatchQueue.main.async {
                 self?.sessionEstablishedCallback(error)
