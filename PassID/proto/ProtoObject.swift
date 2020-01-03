@@ -11,10 +11,5 @@ import SwiftyJSON
 
 
 protocol ProtoObject {
-    static var serKey: String { get }
-    var data: Data { get }
-    
-    init?(data: Data)
-    init?(json: JSON)
     func toJSON() -> JSON
 }
