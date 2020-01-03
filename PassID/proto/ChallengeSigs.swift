@@ -18,6 +18,7 @@ struct ChallengeSigs {
     init () {
         sigs = []
     }
+    
     init(sigs: [Data]) {
         self.sigs = sigs
     }
@@ -31,6 +32,10 @@ struct ChallengeSigs {
         for b64s in b64Sigs {
             sigs.append(Data(base64Encoded: b64s.string!)!)
         }
+    }
+    
+    func isEmpty() -> Bool {
+        return sigs.isEmpty
     }
     
     func toJSON() -> JSON {
