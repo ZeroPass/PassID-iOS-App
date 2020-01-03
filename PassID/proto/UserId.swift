@@ -41,10 +41,7 @@ struct UserId : ProtoObject {
         ]
     }
     
-    static func fromDG15(_ dg15: LDSFile) -> UserId? {
-        if dg15.fileTag != .efDG15 {
-            return nil
-        }
-        return UserId(data: RIPEMD160.hash(message: dg15.value))
+    static func fromDG15(_ dg15: EfDG15) -> UserId {
+        return UserId(data: RIPEMD160.hash(message: dg15.aaPublicKeyBytes()))!
     }
 }

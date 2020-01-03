@@ -99,9 +99,8 @@ extension PassIdClient {
             else {
                 scb.challenge(self.challenge!) { [weak self] data in
                     try self?.requiredPassportData(data, requiredFiles: [.efSOD, .efDG15])
-                    
-                    let sod: EfSOD = try data.ldsFiles[.efSOD]!.asFile()
-                    let dg15: EfDG15 = try data.ldsFiles[.efDG15]!.asFile()
+                    let sod  = try data.ldsFiles[.efSOD]!.asFile() as EfSOD
+                    let dg15 = try data.ldsFiles[.efDG15]!.asFile() as EfDG15
                     
                     var dg14: EfDG14? = nil
                     if data.ldsFiles.contains(.efDG14) {
@@ -136,7 +135,7 @@ extension PassIdClient {
             else {
                 scb.challenge(self.challenge!) { [weak self] data in
                     try self?.requiredPassportData(data, requiredFiles: [.efDG1, .efDG15])
-                    let uid =  UserId.fromDG15(data.ldsFiles[.efDG15]!)!
+                    let uid = UserId.fromDG15(try data.ldsFiles[.efDG15]!.asFile() as EfDG15)
                     let dg1 = try data.ldsFiles[.efDG1]!.asFile() as EfDG1
                     
                     self?.requestLogin(uid: uid, dg1: dg1, cid: (self?.challenge!.id)!, csigs: data.csigs) {
