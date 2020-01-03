@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-struct ChallengeSigs {
+struct ChallengeSigs : ProtoObject {
 
     internal static let serKey = "csigs"
     var sigs: [Data]
@@ -21,17 +21,6 @@ struct ChallengeSigs {
     
     init(sigs: [Data]) {
         self.sigs = sigs
-    }
-    
-    init?(json: JSON) {
-        guard let b64Sigs = json[ChallengeSigs.serKey].array else {
-            return nil
-        }
-        
-        sigs = [Data]()
-        for b64s in b64Sigs {
-            sigs.append(Data(base64Encoded: b64s.string!)!)
-        }
     }
     
     func isEmpty() -> Bool {
