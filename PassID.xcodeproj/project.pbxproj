@@ -48,6 +48,7 @@
 		04CC7A3E23BFABDB003F6A73 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A3D23BFABDB003F6A73 /* String+.swift */; };
 		04CC7A4023BFC9C4003F6A73 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A3F23BFC9C4003F6A73 /* Data+.swift */; };
 		04CC7A4223BFC9F1003F6A73 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A4123BFC9F1003F6A73 /* Array+.swift */; };
+		04CC7A4423BFDDCB003F6A73 /* JSON+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A4323BFDDCB003F6A73 /* JSON+.swift */; };
 		04D412CD23AE5BA3008D922D /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D412CC23AE5BA3008D922D /* ActionView.swift */; };
 		04FB795023AE798C004D53A6 /* PassIdClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB794F23AE798B004D53A6 /* PassIdClient.swift */; };
 		04FB795323AEB8DA004D53A6 /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */; };
@@ -104,6 +105,7 @@
 		04CC7A3D23BFABDB003F6A73 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		04CC7A3F23BFC9C4003F6A73 /* Data+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+.swift"; sourceTree = "<group>"; };
 		04CC7A4123BFC9F1003F6A73 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
+		04CC7A4323BFDDCB003F6A73 /* JSON+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSON+.swift"; sourceTree = "<group>"; };
 		04D412CC23AE5BA3008D922D /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
 		04FB794F23AE798B004D53A6 /* PassIdClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassIdClient.swift; sourceTree = "<group>"; };
 		04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RIPEMD160.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				04CC7A4123BFC9F1003F6A73 /* Array+.swift */,
 				04CC7A3F23BFC9C4003F6A73 /* Data+.swift */,
 				04CC7A3B23BF72B8003F6A73 /* Dictionary+.swift */,
+				04CC7A4323BFDDCB003F6A73 /* JSON+.swift */,
 				04CC7A3D23BFABDB003F6A73 /* String+.swift */,
 			);
 			path = Extensions;
@@ -398,6 +401,7 @@
 				048FDC902396D01E00B01339 /* SceneDelegate.swift in Sources */,
 				0450F57523A7E20A0094FFDA /* PassIdApi.swift in Sources */,
 				04603BB32399531D00FF26E2 /* ActivityView.swift in Sources */,
+				04CC7A4423BFDDCB003F6A73 /* JSON+.swift in Sources */,
 				048FDC922396D01E00B01339 /* ContentView.swift in Sources */,
 				04FB795723AEBB87004D53A6 /* Session.swift in Sources */,
 				04FB795D23AFE73F004D53A6 /* SuccessView.swift in Sources */,
