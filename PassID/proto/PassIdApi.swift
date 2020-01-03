@@ -125,26 +125,13 @@ class PassIdApi {
     
     /* API: passID.getChallenge */
     @discardableResult
-    func register(cid: CID, passportData: PassportData, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
-        guard let dg15 = passportData.ldsFiles[.efDG15] else {
-            return .number(-1)
+    func register(dg15: EfDG15, sod: EfSOD, cid: CID, csigs: ChallengeSigs, dg14: EfDG14?, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
+        var params = try! dg15.toJSON() + sod + cid + csigs
+        if dg14 != nil {
+            try! params += dg14!
         }
-        
-        guard let sod = passportData.ldsFiles[.efSOD] else {
-            return .number(-1)
-        }
-        
-        guard let dg14 = passportData.ldsFiles[.efDG14] else {
-            return .number(-1)
-        }
-        
-        var params = ["dg15" : JSON(dg15.encoded.base64EncodedString())]
-        params.merge(["sod" : JSON(sod.encoded.base64EncodedString())])
-        params.merge(cid.toJSON().dictionary!)
-        params.merge(passportData.csigs.toJSON().dictionary!)
-        params.merge(["dg14" : JSON(dg14.encoded.base64EncodedString())])
 
-        return rpc.call(method: PassIdApi.getApiMethod("register"), params: JSON(params)) { response in
+        return rpc.call(method: PassIdApi.getApiMethod("register"), params: params) { response in
             self.handleResponse(response, completion, valueConstructor: { json in
                 return ProtoSession(json: json)
             })
@@ -153,15 +140,12 @@ class PassIdApi {
     
     @discardableResult
     func login(uid: UserId, dg1: LDSFile? = nil, cid: CID, csigs: ChallengeSigs, completion: @escaping (ApiResponse<ProtoSession>)->Void) -> ApiRequestID {
-        var params = uid.toJSON().dictionary!
-        params.merge(cid.toJSON().dictionary!)
-        params.merge(csigs.toJSON().dictionary!)
-        
+        var params = try! uid.toJSON() + cid + csigs
         if dg1 != nil {
-            params.merge(["dg1" : JSON(dg1!.encoded.base64EncodedString())])
+            try! params += dg1!
         }
 
-        return rpc.call(method: PassIdApi.getApiMethod("login"), params: JSON(params)) { response in
+        return rpc.call(method: PassIdApi.getApiMethod("login"), params: params) { response in
             self.handleResponse(response, completion, valueConstructor: { json in
                 guard let key = SessionKey(json: json) else {
                     return nil
@@ -178,8 +162,7 @@ class PassIdApi {
     @discardableResult
     func sayHello(s: ProtoSession, completion: @escaping (ApiResponse<String>)->Void) -> ApiRequestID {
         let mac = s.getMAC(apiName: "sayHello", rawParams: s.uid.data)
-        var params = s.uid.toJSON().dictionary!
-        params.merge(mac.toJSON().dictionary!)
+        let params = try! s.uid.toJSON() + mac
 
         return rpc.call(method: PassIdApi.getApiMethod("sayHello"), params: JSON(params)) { response in
             self.handleResponse(response, completion, valueConstructor: { json in

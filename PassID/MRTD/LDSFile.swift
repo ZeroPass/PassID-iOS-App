@@ -163,3 +163,44 @@ class EfCOM : LDSFile {
         }
     }
 }
+
+
+class EfSOD : LDSFile {
+    override internal func parse() throws {
+        if fileTag != .efSOD {
+            throw TLVError.InvalidTag("Cannot parse EfSOD, invalid file tag \(fileTag.name())")
+        }
+    }
+}
+
+
+class EfDG1 : LDSFile {
+    override internal func parse() throws {
+        if fileTag != .efDG1 {
+            throw TLVError.InvalidTag("Cannot parse EfDG1, invalid file tag \(fileTag.name())")
+        }
+    }
+}
+
+
+class EfDG14 : LDSFile {
+    override internal func parse() throws {
+        if fileTag != .efDG14 {
+            throw TLVError.InvalidTag("Cannot parse EfDG14, invalid file tag \(fileTag.name())")
+        }
+    }
+}
+
+
+class EfDG15 : LDSFile {
+    
+    func aaPublicKeyBytes() -> Data {
+        return value
+    }
+    
+    override internal func parse() throws {
+        if fileTag != .efDG15 {
+            throw TLVError.InvalidTag("Cannot parse EfDG15, invalid file tag \(fileTag.name())")
+        }
+    }
+}

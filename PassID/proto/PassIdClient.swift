@@ -98,7 +98,17 @@ extension PassIdClient {
             }
             else {
                 scb.challenge(self.challenge!) { [weak self] data in
-                    try self?.requestRegister(cid: (self?.challenge!.id)!, passportData: data) {
+                    try self?.requiredPassportData(data, requiredFiles: [.efSOD, .efDG15])
+                    
+                    let sod: EfSOD = try data.ldsFiles[.efSOD]!.asFile()
+                    let dg15: EfDG15 = try data.ldsFiles[.efDG15]!.asFile()
+                    
+                    var dg14: EfDG14? = nil
+                    if data.ldsFiles.contains(.efDG14) {
+                        dg14 = try data.ldsFiles[.efDG14]!.asFile()
+                    }
+                    
+                    self?.requestRegister(dg15: dg15, sod: sod, cid: (self?.challenge!.id)!, csigs: data.csigs, dg14: dg14) {
                         [weak self] error in
                         self?.challenge = nil
                         if error != nil {
@@ -125,7 +135,11 @@ extension PassIdClient {
             }
             else {
                 scb.challenge(self.challenge!) { [weak self] data in
-                    try self?.requestLogin(cid: (self?.challenge!.id)!, passportData: data) {
+                    try self?.requiredPassportData(data, requiredFiles: [.efDG1, .efDG15])
+                    let uid =  UserId.fromDG15(data.ldsFiles[.efDG15]!)!
+                    let dg1 = try data.ldsFiles[.efDG1]!.asFile() as EfDG1
+                    
+                    self?.requestLogin(uid: uid, dg1: dg1, cid: (self?.challenge!.id)!, csigs: data.csigs) {
                         [weak self] error in
                         self?.challenge = nil
                         if error != nil {
@@ -194,11 +208,9 @@ extension PassIdClient {
         }
     }
     
-    private func requestRegister(cid: CID, passportData data: PassportData, _ completion: @escaping (_ error: ApiError?) -> Void) throws {
-        try requiredPassportData(data, requiredFiles: [.efSOD, .efDG1, .efDG15])
-        
+    private func requestRegister(dg15: EfDG15, sod: EfSOD, cid: CID, csigs: ChallengeSigs, dg14: EfDG14?, _ completion: @escaping (_ error: ApiError?) -> Void) {
         retriableCall({ [weak self] rh in
-            self?.api.register(cid: cid, passportData: data) { r in rh(r) }
+            self?.api.register(dg15: dg15, sod: sod, cid: cid, csigs: csigs, dg14: dg14) { r in rh(r) }
         }) { [weak self] resp in
             guard let session = resp.value else {
                 completion(resp.error)
@@ -209,13 +221,9 @@ extension PassIdClient {
         }
     }
     
-    private func requestLogin(cid: CID, passportData data: PassportData, sendDG1: Bool = false, _ completion: @escaping (_ error: ApiError?) -> Void) throws {
-        try requiredPassportData(data, requiredFiles: [.efDG1, .efDG15])
-        let uid =  UserId.fromDG15(data.ldsFiles[.efDG15]!)!
-        
+    private func requestLogin(uid: UserId, dg1: EfDG1, cid: CID, csigs: ChallengeSigs, sendDG1: Bool = false, _ completion: @escaping (_ error: ApiError?) -> Void) {
         retriableCall({ [weak self] rh in
-            // TODO safely check dg1 & dg15 is in ldsFiles
-            self?.api.login(uid: uid, dg1: sendDG1 ? data.ldsFiles[.efDG1]! : nil, cid: cid, csigs: data.csigs) { r in rh(r) }
+            self?.api.login(uid: uid, dg1: sendDG1 ? dg1 : nil, cid: cid, csigs: csigs) { r in rh(r) }
         }) { [weak self] resp in
             guard let session = resp.value else {
                 switch resp.error {
@@ -226,7 +234,7 @@ extension PassIdClient {
                     else { // Handle request for DG1 file
                         self?.dg1Requested { sendDG1 in
                             if sendDG1 {
-                                try! self?.requestLogin(cid: cid, passportData: data, sendDG1: true, completion)
+                                self?.requestLogin(uid: uid, dg1: dg1, cid: cid, csigs: csigs, sendDG1: true, completion)
                             }
                             else {
                                 completion(resp.error)
