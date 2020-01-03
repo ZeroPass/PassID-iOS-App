@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 public func pad(_ data : [UInt8]) -> [UInt8] {
     let size = 8
     let padBlock : [UInt8] = [0x80, 0, 0, 0, 0, 0, 0, 0]
@@ -37,22 +38,6 @@ public func intToBin(_ data : Int, pad : Int = 2) -> [UInt8] {
         let hex = String(format:"%04x", data)
         return hexRepToBin(hex)
 
-    }
-}
-
-
-
-extension String {
-    subscript (bounds: CountableClosedRange<Int>) -> String {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return String(self[start...end])
-    }
-
-    subscript (bounds: CountableRange<Int>) -> String {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return String(self[start..<end])
     }
 }
 

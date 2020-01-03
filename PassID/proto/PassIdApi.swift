@@ -11,15 +11,6 @@ import SwiftUI
 import SwiftyJSON
 
 
-extension Dictionary {
-    mutating func merge(_ dict: [Key: Value]){
-        for (k, v) in dict {
-            updateValue(v, forKey: k)
-        }
-    }
-}
-
-
 
 typealias ApiRequestID = JsonRpcRequest.ID
 
