@@ -44,7 +44,7 @@ struct ActionView: View {
     @State private var showActivity = false
     
     @State var challenge: ProtoChallenge? = nil
-    @State var initiatePassIdSession: ((PassportData) -> ())? = nil
+    @State var initiatePassIdSession: ((PassportData) throws -> ())? = nil
     
     var body: some View {
         return Group {
@@ -60,7 +60,8 @@ struct ActionView: View {
                         .onPassportData { data in
                             self.showActivity = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.initiatePassIdSession?(data)
+                                try! self.initiatePassIdSession?(data) // Note: data should contain all needed files and signatures
+                                                                       // otherwise this call will result in fatal error due to cb throwing an exception
                             }
                         }
                     .navigationBarTitle(self.action.asString().capitalized)
@@ -150,7 +151,7 @@ struct ActionView: View {
             }
     }
     
-    private func setChallenge(_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) -> Void) {
+    private func setChallenge(_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) throws -> Void) {
         log.debug("Got challenge cid: %@ challenge: %@", challenge.id.data.hex(), challenge.data.hex())
         self.showActivity = false
         self.challenge = challenge

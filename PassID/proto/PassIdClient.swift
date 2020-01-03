@@ -10,6 +10,14 @@ import Alamofire
 import Foundation
 
 
+enum PassIdClientError: Error {
+    case missingRequiredLDSFile(LDSFileTag)
+    case missingChallengeSigs
+    case sessionNotEstablished
+    case unsupportedPassport
+}
+
+
 final class PassIdClient {
     
     typealias Retry = Bool
@@ -23,7 +31,7 @@ final class PassIdClient {
     }
     
     final class SessionPromise {
-        private var challengeCallback: ((_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) -> ()) -> Void)? = nil
+        private var challengeCallback: ((_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) throws -> ()) -> Void)? = nil
         private var successCallback: ((_ uid: UserId) -> ())? = nil
         private var errorCallback: ((_ error: ApiError) -> ())? = nil
     }
@@ -90,7 +98,7 @@ extension PassIdClient {
             }
             else {
                 scb.challenge(self.challenge!) { [weak self] data in
-                    self?.requestRegister(cid: (self?.challenge!.id)!, passportData: data) {
+                    try self?.requestRegister(cid: (self?.challenge!.id)!, passportData: data) {
                         [weak self] error in
                         self?.challenge = nil
                         if error != nil {
@@ -117,7 +125,7 @@ extension PassIdClient {
             }
             else {
                 scb.challenge(self.challenge!) { [weak self] data in
-                    self?.requestLogin(cid: (self?.challenge!.id)!, passportData: data) {
+                    try self?.requestLogin(cid: (self?.challenge!.id)!, passportData: data) {
                         [weak self] error in
                         self?.challenge = nil
                         if error != nil {
@@ -153,7 +161,7 @@ extension PassIdClient {
 extension PassIdClient.SessionPromise {
 
     @discardableResult
-    func onChallenge(_ cb: @escaping (_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) -> ()) -> Void) -> PassIdClient.SessionPromise {
+    func onChallenge(_ cb: @escaping (_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) throws -> ()) -> Void) -> PassIdClient.SessionPromise {
         self.challengeCallback = cb
         return self
     }
@@ -186,7 +194,9 @@ extension PassIdClient {
         }
     }
     
-    private func requestRegister(cid: CID, passportData data: PassportData, _ completion: @escaping (_ error: ApiError?) -> Void) {
+    private func requestRegister(cid: CID, passportData data: PassportData, _ completion: @escaping (_ error: ApiError?) -> Void) throws {
+        try requiredPassportData(data, requiredFiles: [.efSOD, .efDG1, .efDG15])
+        
         retriableCall({ [weak self] rh in
             self?.api.register(cid: cid, passportData: data) { r in rh(r) }
         }) { [weak self] resp in
@@ -199,10 +209,13 @@ extension PassIdClient {
         }
     }
     
-    private func requestLogin(cid: CID, passportData data: PassportData, sendDG1: Bool = false, _ completion: @escaping (_ error: ApiError?) -> Void) {
+    private func requestLogin(cid: CID, passportData data: PassportData, sendDG1: Bool = false, _ completion: @escaping (_ error: ApiError?) -> Void) throws {
+        try requiredPassportData(data, requiredFiles: [.efDG1, .efDG15])
+        let uid =  UserId.fromDG15(data.ldsFiles[.efDG15]!)!
+        
         retriableCall({ [weak self] rh in
             // TODO safely check dg1 & dg15 is in ldsFiles
-            self?.api.login(uid: UserId.fromDG15(data.ldsFiles[.efDG15]!)!, dg1: sendDG1 ? data.ldsFiles[.efDG1]! : nil, cid: cid, csigs: data.csigs) { r in rh(r) }
+            self?.api.login(uid: uid, dg1: sendDG1 ? data.ldsFiles[.efDG1]! : nil, cid: cid, csigs: data.csigs) { r in rh(r) }
         }) { [weak self] resp in
             guard let session = resp.value else {
                 switch resp.error {
@@ -213,7 +226,7 @@ extension PassIdClient {
                     else { // Handle request for DG1 file
                         self?.dg1Requested { sendDG1 in
                             if sendDG1 {
-                                self?.requestLogin(cid: cid, passportData: data, sendDG1: true, completion)
+                                try! self?.requestLogin(cid: cid, passportData: data, sendDG1: true, completion)
                             }
                             else {
                                 completion(resp.error)
@@ -249,6 +262,19 @@ extension PassIdClient {
         }
     }
     
+    
+    private func requiredPassportData(_ data: PassportData, requiredFiles: [LDSFileTag]) throws {
+        for tag in requiredFiles {
+            if !data.ldsFiles.contains(tag) {
+                throw PassIdClientError.missingRequiredLDSFile(tag)
+            }
+        }
+        
+        if data.csigs.isEmpty() {
+            throw PassIdClientError.missingChallengeSigs
+        }
+    }
+    
     private func connectionFailed(_ error: AFError, _ completion: @escaping (Retry) -> Void) {
         if connectionErrorCallback != nil {
             connectionErrorCallback!(error, completion)
@@ -270,7 +296,7 @@ extension PassIdClient {
 
 extension PassIdClient.SessionPromise {
     
-    func challenge(_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) -> ()) {
+    func challenge(_ challenge: ProtoChallenge, _ completion: @escaping (PassportData) throws -> ()) {
         if challengeCallback != nil {
             challengeCallback!(challenge, completion)
         }
