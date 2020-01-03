@@ -10,14 +10,14 @@ import Foundation
 
 @available(iOS 13, *)
 public enum TLVError: Error {
-    case InvalidTag
+    case InvalidTag(_ error: String? = nil)
     case InvalidEncodedTag
     case InvalidLength
     case InvalidEncodedLength
 
     var value: String {
         switch self {
-        case .InvalidTag: return "InvalidTag"
+        case .InvalidTag(let error): return error != nil ? error! : "InvalidTag"
         case .InvalidEncodedTag: return "InvalidEncodedTag"
         case .InvalidLength: return "InvalidLength"
         case .InvalidEncodedLength: return "InvalidEncodedLength"
@@ -30,16 +30,18 @@ open class TLV {
     
     let tag: UInt
     let value: Data
-    init(tag: UInt, value: Data) {
+    required public init(tag: UInt, value: Data) throws {
         // TODO: check tag and value can be encoded and
         //       if not, throw
         self.tag   = tag
         self.value = value
+        try parse()
     }
+    
+    internal func parse() throws {}
 }
 
 extension TLV {
-    
     convenience init(encodedTLV: Data) throws {
         try self.init(encodedTLV: encodedTLV.bytes)
     }
@@ -50,7 +52,7 @@ extension TLV {
     
     convenience init(encodedTLV: [UInt8]) throws {
         let tvPair = try TLV.decode(encodedTLV)
-        self.init(tag: tvPair.0, value: tvPair.1)
+        try self.init(tag: tvPair.0, value: tvPair.1)
     }
     
     var encoded: Data {

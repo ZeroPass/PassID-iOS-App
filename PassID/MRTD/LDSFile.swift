@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftyJSON
+
 
 typealias FID = [UInt8] // represents file id type
 
@@ -109,5 +111,55 @@ public enum LDSFileTag : Int, CaseIterable {
 class LDSFile: TLV {
     var fileTag: LDSFileTag {
         return LDSFileTag(rawValue: Int(tag))!
+    }
+    
+    func asFile<T>() throws -> T where T: LDSFile  {
+        return try T(tag: self.tag, value: self.value)
+    }
+}
+
+extension LDSFile : ProtoObject{
+    func toJSON() -> JSON {
+        return [
+            fileTag.name().removePrefix("EF.").lowercased() :
+            encoded.base64EncodedString()
+        ]
+    }
+}
+
+
+class EfCOM : LDSFile {
+    private(set) var version: String = ""
+    private(set) var unicodeVersion: String = ""
+    private(set) var tags: Set<LDSFileTag> = []
+    
+    override internal func parse() throws {
+        if fileTag != .efCOM {
+            throw TLVError.InvalidTag("Cannot parse EfCOM, invalid file tag \(fileTag.name())")
+        }
+        
+        // Parse version number
+        let versionTuple = try TLV.decode(value)
+        if versionTuple.0.littleEndian != 0x5F01 {
+            throw TLVError.InvalidTag("Invalid version tag \(versionTuple.0.littleEndian)")
+        }
+        version = String(data: versionTuple.1, encoding: .ascii)!
+        
+        // Parse string version
+        let uniVersionTuple = try TLV.decode(value[Int(versionTuple.2)...])
+        if uniVersionTuple.0.littleEndian != 0x5F36 {
+            throw TLVError.InvalidTag("Invalid unicode version tag \(uniVersionTuple.0.littleEndian)")
+        }
+        unicodeVersion = String(data: uniVersionTuple.1, encoding: .utf8)!
+        
+        // Parse tag list
+        let filesTlv = try TLV(encodedTLV: value[Int(versionTuple.2 + uniVersionTuple.2)...])
+        if filesTlv.tag.littleEndian != 0x5C {
+            throw TLVError.InvalidTag("Invalid tag list identifier \(filesTlv.tag.littleEndian)")
+        }
+        
+        for b in filesTlv.value {
+            tags.insert(LDSFileTag(rawValue: Int(b))!)
+        }
     }
 }
