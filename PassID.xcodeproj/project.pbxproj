@@ -49,6 +49,7 @@
 		04CC7A4023BFC9C4003F6A73 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A3F23BFC9C4003F6A73 /* Data+.swift */; };
 		04CC7A4223BFC9F1003F6A73 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A4123BFC9F1003F6A73 /* Array+.swift */; };
 		04CC7A4423BFDDCB003F6A73 /* JSON+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A4323BFDDCB003F6A73 /* JSON+.swift */; };
+		04CC7A4623C4ADA2003F6A73 /* MRZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC7A4523C4ADA2003F6A73 /* MRZ.swift */; };
 		04D412CD23AE5BA3008D922D /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D412CC23AE5BA3008D922D /* ActionView.swift */; };
 		04FB795023AE798C004D53A6 /* PassIdClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB794F23AE798B004D53A6 /* PassIdClient.swift */; };
 		04FB795323AEB8DA004D53A6 /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */; };
@@ -106,6 +107,7 @@
 		04CC7A3F23BFC9C4003F6A73 /* Data+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+.swift"; sourceTree = "<group>"; };
 		04CC7A4123BFC9F1003F6A73 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		04CC7A4323BFDDCB003F6A73 /* JSON+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSON+.swift"; sourceTree = "<group>"; };
+		04CC7A4523C4ADA2003F6A73 /* MRZ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRZ.swift; sourceTree = "<group>"; };
 		04D412CC23AE5BA3008D922D /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
 		04FB794F23AE798B004D53A6 /* PassIdClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassIdClient.swift; sourceTree = "<group>"; };
 		04FB795223AEB8DA004D53A6 /* RIPEMD160.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RIPEMD160.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				042B954623B1601400F71097 /* MRTDSession.swift */,
 				042B954C23B24C7D00F71097 /* MRTDTag.swift */,
 				042B954423B15CF000F71097 /* MRTDUtils.swift */,
+				04CC7A4523C4ADA2003F6A73 /* MRZ.swift */,
 				042B955423B2B7FF00F71097 /* MRZKey.swift */,
 				042B954823B247B200F71097 /* ResponseAPDU.swift */,
 				04FB795F23B0182A004D53A6 /* TLV.swift */,
@@ -382,6 +385,7 @@
 				0450F57723A81A540094FFDA /* PassportView.swift in Sources */,
 				04FB796423B061F5004D53A6 /* UIApplication+KeyWindow.swift in Sources */,
 				04FB795B23AFCB12004D53A6 /* ButtonView.swift in Sources */,
+				04CC7A4623C4ADA2003F6A73 /* MRZ.swift in Sources */,
 				042B954323B159EF00F71097 /* ISO9797Alg3Mac.swift in Sources */,
 				042B955323B2AA7D00F71097 /* MRTDReader.swift in Sources */,
 				042B954123B1531900F71097 /* DES.swift in Sources */,
