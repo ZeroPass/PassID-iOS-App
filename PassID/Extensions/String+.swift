@@ -14,6 +14,14 @@ extension String {
         guard self.hasPrefix(prefix) else { return self }
         return String(self.dropFirst(prefix.count))
     }
+    
+    func rstrip(_ stripChars: CharacterSet = .whitespacesAndNewlines)-> String {
+        var s = self
+        while s.last?.unicodeScalars.contains(where: { stripChars.contains($0)}) ?? false {
+            s = String(s.dropLast())
+        }
+        return String(s)
+    }
 }
 
 extension String {
