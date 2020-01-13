@@ -30,7 +30,8 @@ struct PassportView: View {
     @State private var doe = tomorrow
     private let mrtd = MRTDReader()
     
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode)
+    private var presentationMode: Binding<PresentationMode>
     
     private static let tomorrow  = Date().addingTimeInterval(86400)
     private static let decadeAgo = Calendar.current.date(
