@@ -175,10 +175,17 @@ class EfSOD : LDSFile {
 
 
 class EfDG1 : LDSFile {
+    var mrz: MRZ = MRZ()
     override internal func parse() throws {
         if fileTag != .efDG1 {
             throw TLVError.InvalidTag("Cannot parse EfDG1, invalid file tag \(fileTag.name())")
         }
+        
+        let tlv = try TLV(encodedTLV: value)
+        if tlv.tag.littleEndian != 0x5F1F {
+            throw TLVError.InvalidTag("DG1 value tag \(tlv.tag.littleEndian)")
+        }
+        mrz = try MRZ(encoded: tlv.value)
     }
 }
 
