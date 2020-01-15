@@ -87,6 +87,7 @@ extension PassIdClient {
     func cancelChallenge() {
         if self.challenge != nil {
             self.api.cancelChallenge(challenge: self.challenge!)
+            self.challenge = nil
         }
     }
     
