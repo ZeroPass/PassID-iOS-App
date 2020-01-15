@@ -38,13 +38,18 @@ struct ActionView: View {
     private let client: PassIdClient
     @State private var srvMsg: String = ""
     
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode)
+    private var presentationMode: Binding<PresentationMode>
     private let settings = SettingsStore()
     
     @State private var showActivity = false
     
     @State var challenge: ProtoChallenge? = nil
     @State var initiatePassIdSession: ((PassportData) throws -> ())? = nil
+    
+    @State var dg1: EfDG1? = nil
+    @State private var showDg1Sheet: Bool = false
+    @State private var onDg1ViewDismiss: (() -> ())? = nil
     
     var body: some View {
         return Group {
@@ -95,6 +100,9 @@ struct ActionView: View {
         .background(
             Color(UIColor.systemGray6).edgesIgnoringSafeArea(.all)
         )
+        .sheet(isPresented: $showDg1Sheet, onDismiss: { self.onDg1ViewDismiss!() }) {
+            EfDG1View(dg1: self.dg1!)
+        }
     }
     
     func initClient() {
@@ -102,7 +110,7 @@ struct ActionView: View {
         client.onConnectionError { _, retry in
             self.showActivity = false
             let alert = AlertController(title: "Connection Error", message: "Failed to connect to server", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Go Back", style: .cancel) { _ in
+            alert.addAction(UIAlertAction(title: "Go Back", style: .destructive) { _ in
                 self.goBack()
             })
             alert.addAction(UIAlertAction(title: "Retry", style: .default) {_ in
@@ -111,22 +119,7 @@ struct ActionView: View {
             })
             self.showAlert(alert)
         }
-        client.onDG1Requested { sendDG1 in
-             self.showActivity = false
-             let alert = AlertController(
-                 title: "Personal Data Requested",
-                 message: "Server requested your personal data.\n\nSend personal data to server?",
-                 preferredStyle: .alert
-            )
-             alert.addAction(UIAlertAction(title: "Go Back", style: .cancel) { _ in
-                 self.goBack()
-             })
-             alert.addAction(UIAlertAction(title: "Send", style: .default) {_ in
-                 self.showActivity = true
-                 sendDG1(true)
-             })
-             self.showAlert(alert)
-        }
+        client.onDG1Requested(callback: onDg1Requested)
     }
     
     func updateClient() {
@@ -136,6 +129,37 @@ struct ActionView: View {
     
     private func goBack() {
         presentationMode.wrappedValue.dismiss()
+    }
+    
+    func onDg1Requested(_ dg1: EfDG1, _ sendDG1: @escaping (Bool) -> Void) -> Void {
+        self.showActivity = false
+        let alert = AlertController(
+            title: "Data Required",
+            message: "\nServer requested your personal data from passport in order to login.\n\nSend personal data to server?",
+            preferredStyle: .alert
+        )
+        
+        alert.setTitleStyle(font: UIFont.preferredFont(forTextStyle: .title2), color: nil)
+        alert.setMessageStyle(font: UIFont.preferredFont(forTextStyle: .body), color: nil)
+        
+        
+        alert.addAction(UIAlertAction(title: "View Data", style: .default) { _ in
+            self.dg1 = dg1
+            self.showDg1Sheet = true
+            self.onDg1ViewDismiss = {
+                self.onDg1Requested(dg1, sendDG1)
+                self.showDg1Sheet = false
+            }
+        })
+        alert.addAction(UIAlertAction(title: "Send & Login", style: .default) {_ in
+            self.showActivity = true
+            sendDG1(true)
+        })
+        alert.addAction(UIAlertAction(title: "Go Back", style: .destructive) { _ in
+            self.goBack()
+        })
+        
+        self.showAlert(alert, showOnModal: false)
     }
     
     private func connectCallbacks(_ promise: PassIdClient.SessionPromise) {

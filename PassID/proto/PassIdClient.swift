@@ -41,7 +41,7 @@ final class PassIdClient {
     private var session: ProtoSession? = nil
     
     private var connectionErrorCallback: ((_ error: AFError, _ completion: @escaping (Retry) -> Void) -> ())? = nil
-    private var dg1RequestCallback: ((_ completion: @escaping (_ sendDG1: Bool) -> Void) -> ())? = nil
+    private var dg1RequestCallback: ((_ dg1: EfDG1, _ completion: @escaping (_ sendDG1: Bool) -> Void) -> ())? = nil
 }
 
 extension PassIdClient {
@@ -79,7 +79,7 @@ extension PassIdClient {
     }
     
     @discardableResult
-    func onDG1Requested(callback: @escaping (_ completion: @escaping (_ sendDG1: Bool) -> Void) -> ()) -> PassIdClient {
+    func onDG1Requested(callback: @escaping (_ dg1: EfDG1, _ completion: @escaping (_ sendDG1: Bool) -> Void) -> ()) -> PassIdClient {
         self.dg1RequestCallback = callback
         return self
     }
@@ -232,7 +232,7 @@ extension PassIdClient {
                         completion(resp.error)
                     }
                     else { // Handle request for DG1 file
-                        self?.dg1Requested { sendDG1 in
+                        self?.dg1Requested(dg1) { sendDG1 in
                             if sendDG1 {
                                 self?.requestLogin(uid: uid, dg1: dg1, cid: cid, csigs: csigs, sendDG1: true, completion)
                             }
@@ -292,9 +292,9 @@ extension PassIdClient {
         }
     }
     
-    private func dg1Requested(_ completion: @escaping (_ sendDG1: Bool) -> Void) {
+    private func dg1Requested(_ dg1: EfDG1, _ completion: @escaping (_ sendDG1: Bool) -> Void) {
         if dg1RequestCallback != nil {
-            dg1RequestCallback!(completion)
+            dg1RequestCallback!(dg1, completion)
         }
         else {
             completion(false)
