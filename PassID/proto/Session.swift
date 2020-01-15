@@ -57,21 +57,21 @@ struct ProtoSession {
         self.key = key
         self.expiration = expiration
     }
-    init?(json: JSON) {
-        
-        guard let uid = UserId(json: json)else {
+    init?(json: JSON, uid: UserId? = nil) {
+        var uid = (uid != nil) ? uid : UserId(json: json)
+        if uid == nil {
             return nil
         }
-        
+
         guard let key = SessionKey(json: json) else {
             return nil
         }
-        
+
         guard let expires = json["expires"].int else {
             return nil
         }
         
-        self.init(uid: uid, key: key, expiration: Date(timeIntervalSince1970: TimeInterval(expires)))
+        self.init(uid: uid!, key: key, expiration: Date(timeIntervalSince1970: TimeInterval(expires)))
     }
     
     let uid: UserId
@@ -81,6 +81,7 @@ struct ProtoSession {
     private var nonce: UInt32 = 0
 
     func getMAC(apiName: String, rawParams: Data) -> SessionMac {
+        // TODO: make log
         let msg = getEncodedNonce() + apiName.data(using: .ascii)! + rawParams
         return SessionMac(
             hmac.authenticationCode(for: msg, using: key.asSymmetricKey())
