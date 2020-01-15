@@ -13,7 +13,8 @@ struct SettingsSheet: View {
     @EnvironmentObject var settings: SettingsStore
 
     @State private var showActivity = false
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode)
+    private var presentationMode: Binding<PresentationMode>
     var body: some View {
         ActivityView(msg: "Trying to connect to server ...", showActivity: $showActivity) {
             // Note: when activity is visible it won't cover the whole screen when using this view as modal popup.
@@ -31,7 +32,6 @@ struct SettingsSheet: View {
                             .minValue(1.0)
                             .maxValue(99.9)
                     
-
                         Button(action: {
                             self.showActivity = true
                             let api = PassIdApi(url: self.settings.url, timeout: self.settings.timeout)
