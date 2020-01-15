@@ -37,3 +37,13 @@ extension String {
         return String(self[start..<end])
     }
 }
+
+extension String {
+    func capitalized() -> String {
+        return prefix(1).capitalized + dropFirst().lowercased()
+    }
+
+    mutating func capitalize() {
+        self = self.capitalized()
+    }
+}
