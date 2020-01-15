@@ -10,8 +10,8 @@ import SwiftUI
 
 
 extension View {
-    func showAlert(_ alert: AlertController, animated: Bool = true, bluredBackground: Bool = true) {
-        if let controller = topMostViewController() {
+    func showAlert(_ alert: AlertController, animated: Bool = true, bluredBackground: Bool = true, showOnModal: Bool = true) {
+        if let controller = topMostViewController(includeModal: showOnModal) {
             if bluredBackground {
                 let blurEffectView = UIBlurView(withRadius: 3)
                 blurEffectView.frame = controller.view!.bounds
@@ -27,28 +27,28 @@ extension View {
         }
     }
     
-    private func topMostViewController() -> UIViewController? {
+    private func topMostViewController(includeModal: Bool) -> UIViewController? {
         guard let rootController = UIApplication.keyWindow?.rootViewController else {
             return nil
         }
-        return topMostViewController(for: rootController)
+        return topMostViewController(for: rootController, includeModal: includeModal)
     }
 
-    private func topMostViewController(for controller: UIViewController) -> UIViewController {
-        if let presentedController = controller.presentedViewController {
-            return topMostViewController(for: presentedController)
+    private func topMostViewController(for controller: UIViewController, includeModal: Bool) -> UIViewController {
+        if includeModal, let presentedController = controller.presentedViewController {
+            return topMostViewController(for: presentedController, includeModal: includeModal)
         }
         else if let navigationController = controller as? UINavigationController {
             guard let topController = navigationController.topViewController else {
                 return navigationController
             }
-            return topMostViewController(for: topController)
+            return topMostViewController(for: topController, includeModal: includeModal)
         }
         else if let tabController = controller as? UITabBarController {
             guard let topController = tabController.selectedViewController else {
                 return tabController
             }
-            return topMostViewController(for: topController)
+            return topMostViewController(for: topController, includeModal: includeModal)
         }
         return controller
     }
