@@ -48,7 +48,6 @@ class Log {
         self.category = category
     }
     
-    
     func log(_ level: LogLevel, _ msg : StaticString, _ args: CVarArg...) {
         withVaList(args) {
             Log.log(level, category: self.category, msg, $0)

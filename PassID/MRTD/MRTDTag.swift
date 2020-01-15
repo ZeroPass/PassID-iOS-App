@@ -146,8 +146,6 @@ public class MRTDTag {
         let offset = intToBin(amountRead, pad: 4)
 
         let data: [UInt8] = [0x00, 0xB0, offset[0], offset[1], 0x00, 0x00, readAmount]
-        //print( "Sending \(binToHexRep(data))" )
-        
         let cmd = NFCISO7816APDU(data: Data(data))!
         self.send(cmd: cmd) { (resp, err) in
             guard let response = resp else {
