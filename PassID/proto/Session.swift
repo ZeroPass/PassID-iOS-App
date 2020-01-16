@@ -58,8 +58,7 @@ struct ProtoSession {
         self.expiration = expiration
     }
     init?(json: JSON, uid: UserId? = nil) {
-        var uid = (uid != nil) ? uid : UserId(json: json)
-        if uid == nil {
+        guard let uid = (uid != nil) ? uid : UserId(json: json) else {
             return nil
         }
 
@@ -71,7 +70,7 @@ struct ProtoSession {
             return nil
         }
         
-        self.init(uid: uid!, key: key, expiration: Date(timeIntervalSince1970: TimeInterval(expires)))
+        self.init(uid: uid, key: key, expiration: Date(timeIntervalSince1970: TimeInterval(expires)))
     }
     
     let uid: UserId
