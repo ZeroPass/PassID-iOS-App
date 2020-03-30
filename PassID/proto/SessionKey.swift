@@ -16,12 +16,6 @@ struct SessionKey : ProtoObject {
     internal static let serKey = "session_key"
     var data: Data
     
-    var id: CID {
-        get {
-            return CID(data: self.data[0..<4])!
-        }
-    }
-    
     init?(data: Data) {
         if(data.count != 32) {
             return nil
