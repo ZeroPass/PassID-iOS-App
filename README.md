@@ -18,4 +18,4 @@ iOS app client for PassID PoC.
   10. Fill in data into form as in step 6 then follow step 7
   11. After successful login you can try to login again.
       This time the server should request your personal data from passport (EF.DG1 file).
-      If you choose to send thise file to the server it will return greeting with your name.
+      If you choose to send this file to the server it will return greeting with your name.
